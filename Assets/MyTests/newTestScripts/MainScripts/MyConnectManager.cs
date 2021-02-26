@@ -1,9 +1,5 @@
 ﻿using UnityEngine;
-//using Photon.Pun;
-//using Photon.Realtime;
 using FayvitEventAgregator;
-using FayvitSupportSingleton;
-using FayvitCam;
 using System.Collections.Generic;
 using Mirror;
 
@@ -19,8 +15,9 @@ public class MyConnectManager : NetworkManager//MonoBehaviourPunCallbacks
          conectandoComoMaster,
          conectandoParaJoin
     }
+
     // Start is called before the first frame update
-    void Start()
+    public override void Start()
     {
         transp = GetComponent<TelepathyTransport>();
     }
@@ -61,27 +58,32 @@ public class MyConnectManager : NetworkManager//MonoBehaviourPunCallbacks
 
     public override void OnClientConnect(NetworkConnection conn)
     {
-        Debug.Log("\r\n Estou pegando minha conexão: " + NetworkServer.connections.Count + " isConnected " + NetworkClient.isConnected);
-        Debug.Log("\r\n" + conn);
+        #region suprimido
+        //Debug.Log("\r\n Estou pegando minha conexão: " + NetworkServer.connections.Count + " isConnected " + NetworkClient.isConnected);
+        //Debug.Log("\r\n" + conn);
 
         //Instantiate(myHeroPrefab, new Vector3(-2, 1, 1), Quaternion.identity);
+        #endregion
         ClientScene.AddPlayer(conn);
+        
     }
 
     public override void OnServerAddPlayer(NetworkConnection conn)
     {
         Vector3 pos = new Vector3(
-                Random.Range(-49, 49), 1,
-                Random.Range(-49, 49)
+                Random.Range(-9, 9), 1,
+                Random.Range(-9, 9)
                 );
         GameObject player = Instantiate(spawnPrefabs[0], pos, Quaternion.identity);
 
+        if (conn != NetworkServer.localConnection)
+            NetworkServer.SendToAll(new ChangePlayerNameMessage() { MySendObjects = { conn.connectionId } }); ;
+
+
         NetworkServer.AddPlayerForConnection(conn, player);
-
-        //CameraAplicator.cam.NewFocusForBasicCam(player.transform, 20, 20);
-
-        //EventAgregator.Publish(new GameEvent(EventKey.desligarHudPhoton));
     }
+
+    
 
     public override void OnStopClient()
     {

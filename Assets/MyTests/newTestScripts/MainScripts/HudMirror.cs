@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using FayvitEventAgregator;
-using System;
+using Mirror;
+using FayvitSupportSingleton;
 
 public class HudMirror : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class HudMirror : MonoBehaviour
     [SerializeField] private GameObject desligaveis;
     [SerializeField] private Text txtDoIPv4;
     [SerializeField] private Text txtDoIPv6;
+    [SerializeField] private InputField playerNameField;
 
     // Start is called before the first frame update
     void Start()
@@ -19,7 +21,7 @@ public class HudMirror : MonoBehaviour
         EventAgregator.AddListener(EventKey.iniciandoConexao, OnStartConnect);
         EventAgregator.AddListener(EventKey.conexaoRealizada, OnConnect);
         EventAgregator.AddListener(EventKey.salaCriada, OnCreateRoom);
-        EventAgregator.AddListener(EventKey.desligarHudPhoton, OnRequestOffHud);
+        EventAgregator.AddListener(EventKey.desligarHudMirror, OnRequestOffHud);
         EventAgregator.AddListener(EventKey.conectandoParaJoin, OnStartConnectToJoin);
         EventAgregator.AddListener(EventKey.entrandoNoLobby, OnStartEnterLobby);
         EventAgregator.AddListener(EventKey.entrouNoLobby, OnEnterInLobby);
@@ -32,7 +34,7 @@ public class HudMirror : MonoBehaviour
         EventAgregator.RemoveListener(EventKey.iniciandoConexao, OnStartConnect);
         EventAgregator.RemoveListener(EventKey.conexaoRealizada, OnConnect);
         EventAgregator.RemoveListener(EventKey.salaCriada, OnCreateRoom);
-        EventAgregator.RemoveListener(EventKey.desligarHudPhoton, OnRequestOffHud);
+        EventAgregator.RemoveListener(EventKey.desligarHudMirror, OnRequestOffHud);
         EventAgregator.RemoveListener(EventKey.conectandoParaJoin, OnStartConnectToJoin);
         EventAgregator.RemoveListener(EventKey.entrandoNoLobby, OnStartEnterLobby);
         EventAgregator.RemoveListener(EventKey.entrouNoLobby, OnEnterInLobby);
@@ -70,13 +72,17 @@ public class HudMirror : MonoBehaviour
 
     private void OnRequestOffHud(IGameEvent obj)
     {
+        SupportSingleton.Instance.InvokeOnCountFrame(() =>
+        {
+            EventAgregator.Publish(new GameEvent(EventKey.sendChangePlayerName, NetworkClient.connection, playerNameField.text));
+        },5);
+
         desligaveis.SetActive(false);
     }
 
     private void OnCreateRoom(IGameEvent obj)
     {
         mainText.text += "\n\r Sala criada";
-        
     }
 
     private void OnConnect(IGameEvent obj)

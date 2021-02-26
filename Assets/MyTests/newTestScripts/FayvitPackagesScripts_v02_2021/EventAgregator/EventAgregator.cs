@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System;
+using System.Runtime.InteropServices;
 
 namespace FayvitEventAgregator
 {
@@ -65,10 +66,6 @@ namespace FayvitEventAgregator
     public enum EventKey
     {
         nulo = -1,
-        networkSendEvent,
-        iniciandoConexao,
-        conexaoRealizada,
-        salaCriada,
         UiDeOpcoesChange,
         confirmationPanelBtnYes,
         confirmationPanelBtnNo,
@@ -86,12 +83,21 @@ namespace FayvitEventAgregator
         animateStartJump,
         animateFall,
         changeMoveSpeed,
-        desligarHudPhoton,
+        desligarHudMirror,
         conectandoParaJoin,
         entrandoNoLobby,
         entrouNoLobby,
         entrandoNaSala,
         stopClient,
-        bulletDamage
+        bulletDamage,
+        changePlayerName,
+        sendChangePlayerName,
+        changeLifePoints,
+        changeStaminaPoint,
+        networkSendEvent,
+        iniciandoConexao,
+        conexaoRealizada,
+        salaCriada,
+        addNewPlayer = 32
     }
 }

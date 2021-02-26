@@ -13,8 +13,10 @@ public class Command_RPC_Manager : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        EventAgregator.AddListener(EventKey.bulletDamage, OnPlayerReceiveBulletDamage);        
+        
+        EventAgregator.AddListener(EventKey.bulletDamage, OnPlayerReceiveBulletDamage);
     }
+
 
     private void OnDestroy()
     {
@@ -30,7 +32,7 @@ public class Command_RPC_Manager : NetworkBehaviour
             Vector3 forw = (Vector3)obj.MySendObjects[3];
             NetworkIdentity nId = danado.GetComponent<NetworkIdentity>();
             NetworkIdentity idDono = ((GameObject)obj.MySendObjects[2]).GetComponent<NetworkIdentity>();
-            NetworkServer.SendToClientOfPlayer(nId, new KnockbackMessage() { 
+            NetworkServer.SendToClientOfPlayer(nId, new StandardDamageMessage() { 
                 MySendObjects = { 
                     new SerializableVector3(forw), 
                     idDono.netId
@@ -39,6 +41,8 @@ public class Command_RPC_Manager : NetworkBehaviour
 
         RpcBulletView(pos);
     }
+
+    
 
     [ClientRpc]
     void RpcBulletView(Vector3 pos)
@@ -58,10 +62,15 @@ public class Command_RPC_Manager : NetworkBehaviour
         
     }
 }
-
-public class KnockbackMessage : MyGameMessage
+public class ChangePlayerNameMessage : MyGameMessage
 {
-    public KnockbackMessage() : base() { }
+    public ChangePlayerNameMessage() : base() { }
+
+}
+
+public class StandardDamageMessage : MyGameMessage
+{
+    public StandardDamageMessage() : base() { }
     
 }
 

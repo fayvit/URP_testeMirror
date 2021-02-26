@@ -93,7 +93,7 @@ public class ControlledMoveForCharacter
                         mov._Pulo.IniciaAplicaPulo(T.position.y);
     }*/
 
-    public bool UpdatePosition(float pathDistanceCheck=1)
+    public bool UpdatePosition(float pathDistanceCheck=1,bool run=false)
     {
         bool retorno = false;
         if (path != null)
@@ -101,7 +101,7 @@ public class ControlledMoveForCharacter
             if (indiceDaDirecao < path.corners.Length)
             {
                 Vector3 pos = oControlado.transform.position;
-                mov.MoveApplicator(Vector3.ProjectOnPlane(path.corners[indiceDaDirecao] - pos, Vector3.up).normalized);
+                mov.MoveApplicator(Vector3.ProjectOnPlane(path.corners[indiceDaDirecao] - pos, Vector3.up).normalized,run);
 
                 TestepuloBoxOverlap(pos);
 
@@ -112,7 +112,6 @@ public class ControlledMoveForCharacter
             else
             {
                 mov.MoveApplicator(Vector3.zero);
-                //AnimacaoPadrao();
                 retorno = true;
             }
         }

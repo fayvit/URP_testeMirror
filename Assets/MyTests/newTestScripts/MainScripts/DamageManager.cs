@@ -1,11 +1,9 @@
 ﻿using FayvitMove;
 using FayvitEventAgregator;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class DamageManager
+public class SimpleKnowbackManager
 {
     [SerializeField] private float tempoNoDano = .25f;
     [SerializeField] private float repulsaoNoDano = 1;
@@ -19,15 +17,10 @@ public class DamageManager
     {
         this.mov = mov;
 
-
-
         tempoDecorrido = 0;
         dirDeRepulsao = dirDano.normalized;
 
         EventAgregator.Publish(new GameEvent(EventKey.requestShakeCam, ShakeAxis.xy, 5, .25f));
-        //InstanciaLigando.Instantiate(Resources.Load<GameObject>("particulaDanoAoHeroi"), mov.Controle.transform.position, 2);
-        //EventAgregator.Publish(new GameEvent(mov.Controller.gameObject, EventKey.afastaInimigosDoHeroi));
-
 
     }
 

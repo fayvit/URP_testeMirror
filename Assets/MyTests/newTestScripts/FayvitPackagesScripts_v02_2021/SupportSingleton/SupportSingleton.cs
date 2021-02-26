@@ -44,6 +44,20 @@ namespace FayvitSupportSingleton
             StartCoroutine(CountFrameInvoke(acao,count));
         }
 
+        public void InvokeOnCountFrame(GameObject G,System.Action acao, uint count = 1)
+        {
+            StartCoroutine(CountFrameInvoke(G,acao, count));
+        }
+
+        IEnumerator CountFrameInvoke(GameObject G,System.Action s, uint count)
+        {
+            for (int i = 0; i < count; i++)
+                yield return new WaitForEndOfFrame();
+
+            if (G != null)
+                s();
+        }
+
         IEnumerator CountFrameInvoke(System.Action s,uint count)
         {
             for(int i=0; i<count;i++)
@@ -59,9 +73,21 @@ namespace FayvitSupportSingleton
                 s();
         }
 
+        IEnumerator EndFrameInvoke(System.Action s)
+        {
+            yield return new WaitForEndOfFrame();
+            s();
+        }
+
+
         public void InvokeOnEndFrame(GameObject G, System.Action acao)
         {
             StartCoroutine(EndFrameInvokeWithObject(G,acao));
+        }
+
+        public void InvokeOnEndFrame(System.Action acao)
+        {
+            StartCoroutine(EndFrameInvoke(acao));
         }
 
         IEnumerator RealTimeCall(float time, System.Action s)
