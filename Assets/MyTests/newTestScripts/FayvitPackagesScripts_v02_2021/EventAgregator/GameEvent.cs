@@ -14,5 +14,11 @@ namespace FayvitEventAgregator
             Key = key;
             MySendObjects = o;
         }
+
+        public GameEvent(object[] o,EventKey key )
+        {
+            Key = key;
+            MySendObjects = o;
+        }
     }
 }

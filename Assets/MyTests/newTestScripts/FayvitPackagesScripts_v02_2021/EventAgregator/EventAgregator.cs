@@ -51,6 +51,11 @@ namespace FayvitEventAgregator
             }
         }
 
+        public static void PublishGameEvent(EventKey key, params object[] o)
+        {
+            Publish(new GameEvent(o, key));
+        }
+
         public static void Publish(IGameEvent e)
         {
             Publish(e.Key, e);
@@ -98,6 +103,9 @@ namespace FayvitEventAgregator
         iniciandoConexao,
         conexaoRealizada,
         salaCriada,
-        addNewPlayer = 32
+        addNewPlayer = 32,
+        enterInTimedDamage = 33,
+        exitInTimedDamage = 34,
+        requestViewFiredamage = 35
     }
 }

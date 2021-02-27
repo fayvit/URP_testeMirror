@@ -91,8 +91,11 @@
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v02_2021\MyUI_Space\FayvitUiEvent.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v02_2021\MyUI_Space\ConfirmationPanel.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v02_2021\CommandReaderSpace\Android\MyButtonEvents.cs" />
+    <Compile Include="Assets\MyTests\newTestScripts\MainScripts\AttackManager.cs" />
+    <Compile Include="Assets\MyTests\newTestScripts\MainScripts\DamageTrigger.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v02_2021\MyUI_Space\TextDisplay.cs" />
     <Compile Include="Assets\FSP\MAST\Scripts\Tools\MAST_PrepModels.cs" />
+    <Compile Include="Assets\MyTests\newTestScripts\MainScripts\TriggerForTimedDamage.cs" />
     <Compile Include="Assets\MyTests\testScripts\ListServerTest\ListServerNetworkManagerExtensions.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v02_2021\CommandReaderSpace\JoystickCommandReader.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v02_2021\CommandReaderSpace\AndroidCommandReader.cs" />
@@ -133,8 +136,7 @@
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v02_2021\MyUI_Space\ParentingInTheHUD.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v02_2021\Camera\InducedDirection.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v02_2021\Camera\FayvitCameraSupport.cs" />
-    <Compile Include="Assets\MyTests\newTestScripts\MainScripts\DamageTrigger.cs" />
-    <Compile Include="Assets\MyTests\newTestScripts\MainScripts\AttackManager.cs" />
+    <Compile Include="Assets\MyTests\newTestScripts\MainScripts\MagicAttackManager.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Mirror\Plugins\Mono.Cecil\Mono.CecilX.dll" />

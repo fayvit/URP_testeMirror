@@ -26,9 +26,11 @@ namespace FayvitMove
         private bool retornoDonoChao;
         private bool isGrounded;
         private bool wasGrounded;
+        
         //private float groundedRadius = .1f;
         private Transform groundCheck;
 
+        public bool UseSlowSpeed { get; set; } = false;
         public bool ApplicableGravity { get; set; } = true;
 
         public CharacterController Controller { get; private set; }
@@ -215,6 +217,8 @@ namespace FayvitMove
                 movFeatures.runSpeed :
                 movFeatures.walkSpeed;
 
+            targetSpeed = UseSlowSpeed ? movFeatures.slowSpeed : targetSpeed;
+
 
             if (targetDirection != Vector3.zero)
             {
@@ -270,11 +274,13 @@ namespace FayvitMove
             movFeatures.walkSpeed = newSpeed;
         }
 
+
     }
 
     [System.Serializable]
     public class MoveFeatures : System.ICloneable
     {
+        public float slowSpeed = 2;
         public float walkSpeed = 6;
         public float runSpeed = 12;
         public bool rotAlways = false;

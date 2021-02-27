@@ -477,7 +477,7 @@ GameObject:
   - component: {fileID: 3577815249393802552}
   m_Layer: 0
   m_Name: CuboPersonagem
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -580,6 +580,7 @@ MonoBehaviour:
     mov:
       lockTarget: {fileID: 0}
       movFeatures:
+        slowSpeed: 2
         walkSpeed: 6
         runSpeed: 12
         rotAlways: 0
@@ -615,8 +616,14 @@ MonoBehaviour:
   atkManager:
     colisorDoAtaqueComum: {fileID: 7513396813240025077}
     swordSound: []
+  mgAttack:
+    triggerSound: []
+    TEMPO_DO_ATAQUE_COMUM: 0.25
+    INTERVALO_DE_ATAQUE: 0.3
   distanciaChecaMovimento: 1.2
   nomeJogador: Jogador n
+  timedDamage: 0
+  intervalTimedDamage: 0.6
 --- !u!114 &8352749467791584983
 MonoBehaviour:
   m_ObjectHideFlags: 0

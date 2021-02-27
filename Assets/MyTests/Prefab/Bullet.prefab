@@ -129,7 +129,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  vel: 10
+  vel: 15
   tempoDeVida: 10
 --- !u!54 &-2060660532807735879
 Rigidbody:

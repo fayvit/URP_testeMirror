@@ -2,7 +2,6 @@
 using Mirror;
 using UnityEngine;
 using FayvitEventAgregator;
-using System;
 
 namespace MyTestMirror
 {
@@ -10,7 +9,8 @@ namespace MyTestMirror
     { 
         aPasseio,
         emDano,
-        emAtk
+        emAtk,
+        emMgAtk
     }
 
     public class CharacterManager : NetworkBehaviour
@@ -20,11 +20,15 @@ namespace MyTestMirror
         [SerializeField] private SimpleKnowbackManager thisDamage;
         [SerializeField] private DadosDoPersonagem dados;
         [SerializeField] private AttackManager atkManager;
+        [SerializeField] private MagicAttackManager mgAttack;
         [SerializeField] private float distanciaChecaMovimento = 1.2f;
         [SerializeField, SyncVar] private string nomeJogador = "Jogador n";
+        [SerializeField] private bool timedDamage = false;
+        [SerializeField] private float intervalTimedDamage = .25f;
 
         private NetworkIdentity nId;
         private EstadoDoPersonagem estado = EstadoDoPersonagem.aPasseio;
+        private float contadorDoTempo = 0;
 
         // Start is called before the first frame update
         void Start()
@@ -39,35 +43,42 @@ namespace MyTestMirror
 
                 CameraAplicator.cam.NewFocusForBasicCam(transform, 30, 10);
                 EventAgregator.Publish(new GameEvent(EventKey.desligarHudMirror));
-                NetworkClient.RegisterHandler<StandardDamageMessage>(OnReceiveStandardDamage);
-                EventAgregator.AddListener(EventKey.sendChangePlayerName, OnChangePlayerName);
-                NetworkClient.RegisterHandler<ChangePlayerNameMessage>(OnRequestChangeName);
 
+                EventAgregator.AddListener(EventKey.sendChangePlayerName, OnChangePlayerName);
+                EventAgregator.AddListener(EventKey.enterInTimedDamage, OnEnterInTimedDamage);
+                EventAgregator.AddListener(EventKey.exitInTimedDamage, OnExitInTimedDamage);
+
+                NetworkClient.RegisterHandler<ChangePlayerNameMessage>(OnRequestChangeName);
+                NetworkClient.RegisterHandler<StandardDamageMessage>(OnReceiveStandardDamage);
                 dados.StManager.OnChangeStaminaPoints += () => {
-                    Debug.Log("Chamando onChange");
                     CmdChangeStaminaPoints(dados.StManager.StaminaPoints, dados.StManager.MaxStaminaPoints);
                 };
-
             }
 
-            //EventAgregator.AddListener(EventKey.addNewPlayer, OnAddNewPlayer);
-
-
+            
         }
 
         private void OnDestroy()
         {
             if (nId.isLocalPlayer)
             {
-                NetworkClient.UnregisterHandler<StandardDamageMessage>();
                 EventAgregator.RemoveListener(EventKey.sendChangePlayerName, OnChangePlayerName);
+                EventAgregator.RemoveListener(EventKey.enterInTimedDamage, OnEnterInTimedDamage);
+                EventAgregator.RemoveListener(EventKey.exitInTimedDamage, OnExitInTimedDamage);
+                NetworkClient.UnregisterHandler<StandardDamageMessage>();                
                 NetworkClient.UnregisterHandler<ChangePlayerNameMessage>();
-
             }
+        }
 
-            //EventAgregator.RemoveListener(EventKey.addNewPlayer, OnAddNewPlayer);
+        private void OnExitInTimedDamage(IGameEvent e)
+        {
+            timedDamage = false;
+            contadorDoTempo = 0;
+        }
 
-
+        private void OnEnterInTimedDamage(IGameEvent e)
+        {
+            timedDamage = true;
         }
 
         private void OnRequestChangeName(NetworkConnection arg1, ChangePlayerNameMessage arg2)
@@ -136,6 +147,7 @@ namespace MyTestMirror
         void EstadoA_Passeio()
         {
             atkManager.UpdateAttack();
+            mgAttack.UpdateAttack();
             bool run = Input.GetKey(KeyCode.E) && dados.StManager.VerifyStaminaAction();
 
             if (Input.GetMouseButtonDown(0))
@@ -149,7 +161,7 @@ namespace MyTestMirror
                     markPoint.transform.position = V;
                 }
             }
-            else if (Input.GetKeyDown(KeyCode.Q))
+            else if (Input.GetKeyDown(KeyCode.Q) && mgAttack.IniciarAtaqueSePodeAtacar())
             {
                 Vector3 V;
                 if (!GetRaycastPoint.GetPoint(out V))
@@ -162,14 +174,18 @@ namespace MyTestMirror
                 }
 
                 CmdShoot(V);
+                mgAttack.DisparaAtaque();
+                estado = EstadoDoPersonagem.emMgAtk;
+                thisControl.Mov.UseSlowSpeed = true;
             }
-            else if (Input.GetKeyDown(KeyCode.W))
+            else if (Input.GetKeyDown(KeyCode.W)
+                && atkManager.IniciarAtaqueSePodeAtacar()
+                && mgAttack.IniciarAtaqueSePodeAtacar())
             {
-                if (atkManager.IniciarAtaqueSePodeAtacar())
-                {
-                    thisControl.ModificarOndeChegar(transform.position);
-                    CmdIniciarAtk();
-                }
+                
+                thisControl.ModificarOndeChegar(transform.position);
+                CmdIniciarAtk();
+                
             }
 
             if (thisControl.UpdatePosition(distanciaChecaMovimento, run))
@@ -186,6 +202,7 @@ namespace MyTestMirror
             
                 
         }
+
         [Command]
         void CmdChangeStaminaPoints(int st,int mst)
         {
@@ -255,8 +272,36 @@ namespace MyTestMirror
                             CmdResetAtkManager();
                         }
                     break;
+                    case EstadoDoPersonagem.emMgAtk:
+                        thisControl.UpdatePosition(distanciaChecaMovimento);
+                        if (mgAttack.UpdateAttack())
+                        {
+                            mgAttack.ResetaAttackManager();
+                            estado = EstadoDoPersonagem.aPasseio;
+                            thisControl.Mov.UseSlowSpeed = false;
+                        }
+                    break;
+                }
+
+                if (timedDamage)
+                {
+                    contadorDoTempo -= Time.deltaTime;
+                    if (contadorDoTempo < 0)
+                    {
+                        contadorDoTempo = intervalTimedDamage;
+                        dados.ApplyDamage(4);
+                        CmdUpdateLifePoints(dados.LifePoints, dados.MaxLifePoints);
+                        CmdView(transform.position);
+                    }
                 }
             }
         }
+
+        [Command]
+        void CmdView(Vector3 pos)
+        {
+            EventAgregator.PublishGameEvent(EventKey.requestViewFiredamage, pos);
+        }
+    
     } 
 }

@@ -14,7 +14,7 @@ public class AttackManager
 
     private const float tempoDoAtaqueComum = 0.25f;
     private const float INTERVALO_DE_ATAQUE = .4f;
-
+#pragma warning restore 0649
 
     private enum AttacksTipes
     {

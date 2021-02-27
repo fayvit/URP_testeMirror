@@ -15,12 +15,14 @@ public class Command_RPC_Manager : NetworkBehaviour
     {
         
         EventAgregator.AddListener(EventKey.bulletDamage, OnPlayerReceiveBulletDamage);
+        EventAgregator.AddListener(EventKey.requestViewFiredamage, OnPlayerReceiveFireDamage);
     }
 
 
     private void OnDestroy()
     {
         EventAgregator.RemoveListener(EventKey.bulletDamage, OnPlayerReceiveBulletDamage);
+        EventAgregator.RemoveListener(EventKey.requestViewFiredamage, OnPlayerReceiveFireDamage);
     }
 
     private void OnPlayerReceiveBulletDamage(IGameEvent obj)
@@ -39,17 +41,21 @@ public class Command_RPC_Manager : NetworkBehaviour
                 } });
         }
 
-        RpcBulletView(pos);
+        RpcBulletView(pos, "particulaDoDano");
     }
 
-    
+    private void OnPlayerReceiveFireDamage(IGameEvent e)
+    {
+        Vector3 pos = (Vector3)e.MySendObjects[0];
+        RpcBulletView(pos, "particulaDoDano_fogo");
+    }
 
     [ClientRpc]
-    void RpcBulletView(Vector3 pos)
+    void RpcBulletView(Vector3 pos,string particula)
     {
         Destroy(
             Instantiate(
-                Resources.Load<GameObject>("particulaDoDano"),
+                Resources.Load<GameObject>(particula),
                 pos,
                 Quaternion.identity
                 ),3
@@ -62,6 +68,7 @@ public class Command_RPC_Manager : NetworkBehaviour
         
     }
 }
+
 public class ChangePlayerNameMessage : MyGameMessage
 {
     public ChangePlayerNameMessage() : base() { }
