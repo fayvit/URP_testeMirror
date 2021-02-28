@@ -5,11 +5,11 @@ using Mirror;
 
 public class MyConnectManager : NetworkManager//MonoBehaviourPunCallbacks
 {
-    
-
     private ConnectionState connState = ConnectionState.conectandoComoMaster;
     private TelepathyTransport transp;
     
+
+
     private enum ConnectionState
     { 
          conectandoComoMaster,
@@ -79,6 +79,10 @@ public class MyConnectManager : NetworkManager//MonoBehaviourPunCallbacks
         if (conn != NetworkServer.localConnection)
             NetworkServer.SendToAll(new ChangePlayerNameMessage() { MySendObjects = { conn.connectionId } }); ;
 
+        
+            GameObject commSender = Instantiate(spawnPrefabs[2], pos, Quaternion.identity);
+            NetworkServer.Spawn(commSender,conn);            
+        
 
         NetworkServer.AddPlayerForConnection(conn, player);
     }

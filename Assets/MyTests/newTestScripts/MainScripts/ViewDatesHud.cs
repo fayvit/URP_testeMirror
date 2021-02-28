@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using FayvitEventAgregator;
 using System;
+using Mirror;
 
 public class ViewDatesHud : MonoBehaviour
 {
@@ -18,9 +19,22 @@ public class ViewDatesHud : MonoBehaviour
         EventAgregator.AddListener(EventKey.changePlayerName, OnChangePlayerName);
     }
 
+
+    private void OnDestroy()
+    {
+        EventAgregator.RemoveListener(EventKey.changeLifePoints, OnChangeLifePoints);
+        EventAgregator.RemoveListener(EventKey.changeStaminaPoint, OnChangeStaminaPoints);
+        EventAgregator.RemoveListener(EventKey.changePlayerName, OnChangePlayerName);
+    }
+
     private void OnChangeStaminaPoints(IGameEvent obj)
     {
-        if (obj.MySendObjects[0] as Transform == transform.parent)
+        NetworkIdentity nId = NetworkIdentity.spawned[(uint)obj.MySendObjects[0]];
+
+        Debug.Log(nId);
+
+        //Transform T = NetworkManager.singleton.sp
+        if (nId.transform == transform.parent)
         {
             int lp = (int)obj.MySendObjects[1];
             int mlp = (int)obj.MySendObjects[2];
@@ -30,7 +44,13 @@ public class ViewDatesHud : MonoBehaviour
 
     private void OnChangeLifePoints(IGameEvent obj)
     {
-        if (obj.MySendObjects[0] as Transform == transform.parent)
+        NetworkIdentity nId = NetworkIdentity.spawned[(uint)obj.MySendObjects[0]];
+        //ClientScene.spawnableObjects[(ulong)obj.MySendObjects[0]];
+
+        Debug.Log(nId);
+
+        //Transform T = NetworkManager.singleton.sp
+        if (nId.transform == transform.parent)
         {
             int lp = (int)obj.MySendObjects[1];
             int mlp = (int)obj.MySendObjects[2];
@@ -46,10 +66,6 @@ public class ViewDatesHud : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()

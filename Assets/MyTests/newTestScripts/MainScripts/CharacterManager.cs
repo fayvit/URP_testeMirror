@@ -51,7 +51,9 @@ namespace MyTestMirror
                 NetworkClient.RegisterHandler<ChangePlayerNameMessage>(OnRequestChangeName);
                 NetworkClient.RegisterHandler<StandardDamageMessage>(OnReceiveStandardDamage);
                 dados.StManager.OnChangeStaminaPoints += () => {
-                    CmdChangeStaminaPoints(dados.StManager.StaminaPoints, dados.StManager.MaxStaminaPoints);
+                    EventAgregator.PublishGameEvent(EventKey.networkSendEvent,EventKey.changeStaminaPoint,
+                        nId.netId, dados.StManager.StaminaPoints, dados.StManager.MaxStaminaPoints);
+                    //CmdChangeStaminaPoints(dados.StManager.StaminaPoints, dados.StManager.MaxStaminaPoints);
                 };
             }
 
@@ -115,35 +117,6 @@ namespace MyTestMirror
             EventAgregator.Publish(new GameEvent(EventKey.changePlayerName, nomeJogador, transform));
         }
 
-        private void OnChangePlayerName(IGameEvent e)
-        {
-            CmdName((string)e.MySendObjects[1]);
-        }
-
-        private void OnReceiveStandardDamage(NetworkConnection arg1, StandardDamageMessage arg2)
-        {
-            SerializableVector3 projPos = (SerializableVector3)arg2.MySendObjects[0];
-            uint idDono = (uint)arg2.MySendObjects[1];
-
-            thisDamage.StartDamage(projPos.GetV3, thisControl.Mov);
-            estado = EstadoDoPersonagem.emDano;
-
-            dados.ApplyDamage(10);
-            CmdUpdateLifePoints(dados.LifePoints, dados.MaxLifePoints);
-        }
-
-        [Command]
-        void CmdUpdateLifePoints(int lp, int mlp)
-        {
-            RpcUpdateLifePoints(lp, mlp);
-        }
-
-        [ClientRpc]
-        void RpcUpdateLifePoints(int lp, int mlp)
-        {
-            EventAgregator.Publish(new GameEvent(EventKey.changeLifePoints, transform, lp, mlp));
-        }
-
         void EstadoA_Passeio()
         {
             atkManager.UpdateAttack();
@@ -182,10 +155,10 @@ namespace MyTestMirror
                 && atkManager.IniciarAtaqueSePodeAtacar()
                 && mgAttack.IniciarAtaqueSePodeAtacar())
             {
-                
+
                 thisControl.ModificarOndeChegar(transform.position);
                 CmdIniciarAtk();
-                
+
             }
 
             if (thisControl.UpdatePosition(distanciaChecaMovimento, run))
@@ -199,21 +172,55 @@ namespace MyTestMirror
 
             }
 
-            
-                
+
+
         }
 
-        [Command]
-        void CmdChangeStaminaPoints(int st,int mst)
+        private void OnChangePlayerName(IGameEvent e)
         {
-            RpcChangeStaminaPoints(st, mst);
+            CmdName((string)e.MySendObjects[1]);
         }
 
-        [ClientRpc]
-        void RpcChangeStaminaPoints(int st, int mst)
+        private void OnReceiveStandardDamage(NetworkConnection arg1, StandardDamageMessage arg2)
         {
-            EventAgregator.Publish(new GameEvent(EventKey.changeStaminaPoint, transform, st, mst));
+            SerializableVector3 projPos = (SerializableVector3)arg2.MySendObjects[0];
+            uint idDono = (uint)arg2.MySendObjects[1];
+
+            thisDamage.StartDamage(projPos.GetV3, thisControl.Mov);
+            estado = EstadoDoPersonagem.emDano;
+
+            dados.ApplyDamage(10);
+            //CmdUpdateLifePoints(dados.LifePoints, dados.MaxLifePoints);
+            EventAgregator.PublishGameEvent(EventKey.networkSendEvent, EventKey.changeLifePoints, nId.netId, 
+                dados.LifePoints, dados.MaxLifePoints
+                );
         }
+
+        #region commandSuprimidos
+        //[Command]
+        //void CmdUpdateLifePoints(int lp, int mlp)
+        //{
+        //    RpcUpdateLifePoints(lp, mlp);
+        //}
+
+        //[ClientRpc]
+        //void RpcUpdateLifePoints(int lp, int mlp)
+        //{
+        //    EventAgregator.Publish(new GameEvent(EventKey.changeLifePoints, transform, lp, mlp));
+        //}
+
+        //[Command]
+        //void CmdChangeStaminaPoints(int st,int mst)
+        //{
+        //    RpcChangeStaminaPoints(st, mst);
+        //}
+
+        //[ClientRpc]
+        //void RpcChangeStaminaPoints(int st, int mst)
+        //{
+        //    EventAgregator.Publish(new GameEvent(EventKey.changeStaminaPoint, transform, st, mst));
+        //}
+        #endregion
 
         [Command]
         void CmdIniciarAtk()
@@ -243,6 +250,7 @@ namespace MyTestMirror
         {
             RpcResetAtkManager();
         }
+
         [ClientRpc]
         void RpcResetAtkManager()
         {
@@ -283,16 +291,24 @@ namespace MyTestMirror
                     break;
                 }
 
-                if (timedDamage)
+                VerifyApplyTimedDamage();
+            }
+        }
+
+        void VerifyApplyTimedDamage()
+        {
+            if (timedDamage)
+            {
+                contadorDoTempo -= Time.deltaTime;
+                if (contadorDoTempo < 0)
                 {
-                    contadorDoTempo -= Time.deltaTime;
-                    if (contadorDoTempo < 0)
-                    {
-                        contadorDoTempo = intervalTimedDamage;
-                        dados.ApplyDamage(4);
-                        CmdUpdateLifePoints(dados.LifePoints, dados.MaxLifePoints);
-                        CmdView(transform.position);
-                    }
+                    contadorDoTempo = intervalTimedDamage;
+                    dados.ApplyDamage(4);
+                    //CmdUpdateLifePoints(dados.LifePoints, dados.MaxLifePoints);
+                    EventAgregator.PublishGameEvent(EventKey.networkSendEvent, EventKey.changeLifePoints, nId.netId,
+                            dados.LifePoints, dados.MaxLifePoints
+                        );
+                    CmdView(transform.position);
                 }
             }
         }

@@ -51,6 +51,11 @@ namespace FayvitEventAgregator
             }
         }
 
+        public static void PublishGameEvent(object[] o, EventKey key)
+        {
+            Publish(new GameEvent(o, key));
+        }
+
         public static void PublishGameEvent(EventKey key, params object[] o)
         {
             Publish(new GameEvent(o, key));

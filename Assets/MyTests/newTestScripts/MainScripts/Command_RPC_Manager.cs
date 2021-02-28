@@ -100,20 +100,25 @@ public abstract class MyGameMessage : IMessageBase
     {
         
         ArraySegment<byte> b = reader.ReadBytesAndSizeSegment();
-        ObjectWithBytes(b.ToArray());
+        MySendObjects = BytesToObject.ObjectWithBytes(b.ToArray());
     }
 
     public void Serialize(NetworkWriter writer)
     {
 
-        byte[] bytes = ObjectForBytes();
+        byte[] bytes = BytesToObject.ObjectForBytes(MySendObjects);
         
         ArraySegment<byte> b = new ArraySegment<byte>(bytes);
         writer.WriteBytesAndSizeSegment(b);
 
     }
 
-    public byte[] ObjectForBytes()
+    
+}
+
+public static class BytesToObject
+{
+    public static byte[] ObjectForBytes(List<object> MySendObjects)
     {
         MemoryStream ms = new MemoryStream();
         BinaryFormatter bf = new BinaryFormatter();
@@ -123,10 +128,10 @@ public abstract class MyGameMessage : IMessageBase
         return ms.ToArray();
     }
 
-    public void ObjectWithBytes(byte[] b)
+    public static List<object> ObjectWithBytes(byte[] b)
     {
         MemoryStream ms = new MemoryStream(b);
         BinaryFormatter bf = new BinaryFormatter();
-        MySendObjects = (List<object>)bf.Deserialize(ms);
+        return (List<object>)bf.Deserialize(ms);
     }
 }

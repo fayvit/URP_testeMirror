@@ -22,13 +22,18 @@ public class StaminaManager
     public int StaminaPoints { get => staminaPoints; }
     public int MaxStaminaPoints { get => maxStaminaPoints; }
     public System.Action OnChangeStaminaPoints { get; set; }
+    public System.Action OnZeroedStamina { get; set; }
+    public System.Action OnRegenZeroedStamina { get; set; }
 
     public void ConsumeStamina(uint val, bool restarTime = true)
     {
         staminaPoints = Mathf.Max(0, staminaPoints - (int)val);
 
         if (staminaPoints <= 0)
+        {
+            OnZeroedStamina?.Invoke();
             zeroedStamina = true;
+        }
 
         if (restarTime)
             RestartStaminaTimeCount();
@@ -104,6 +109,8 @@ public class StaminaManager
             if (staminaPoints >= maxStaminaPoints)
             {
                 zeroedStamina = false;
+                OnRegenZeroedStamina?.Invoke();
+
                 timeCount = Mathf.Max(
                     blockingSlowness * zeroedVelToTotalRegen,
                     blockingSlowness * velToTotalRegen,

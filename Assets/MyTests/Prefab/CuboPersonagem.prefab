@@ -608,18 +608,16 @@ MonoBehaviour:
     stManager:
       staminaPoints: 100
       maxStaminaPoints: 100
-      velToTotalRegen: 23
-      zeroedVelToTotalRegen: 30
-      runConsumeTax: 0.01
-      blockingSlowness: 0.25
+      velToTotalRegen: 5
+      zeroedVelToTotalRegen: 7
+      runConsumeTax: 0.05
+      blockingSlowness: 10
       zeroedStamina: 0
   atkManager:
     colisorDoAtaqueComum: {fileID: 7513396813240025077}
     swordSound: []
   mgAttack:
     triggerSound: []
-    TEMPO_DO_ATAQUE_COMUM: 0.25
-    INTERVALO_DE_ATAQUE: 0.3
   distanciaChecaMovimento: 1.2
   nomeJogador: Jogador n
   timedDamage: 0
