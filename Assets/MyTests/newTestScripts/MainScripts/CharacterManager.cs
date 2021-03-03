@@ -2,6 +2,8 @@
 using Mirror;
 using UnityEngine;
 using FayvitEventAgregator;
+using FayvitSupportSingleton;
+using System;
 
 namespace MyTestMirror
 {
@@ -23,12 +25,16 @@ namespace MyTestMirror
         [SerializeField] private MagicAttackManager mgAttack;
         [SerializeField] private float distanciaChecaMovimento = 1.2f;
         [SerializeField, SyncVar] private string nomeJogador = "Jogador n";
+        [SerializeField, SyncVar] private int connectionID = -1;
         [SerializeField] private bool timedDamage = false;
         [SerializeField] private float intervalTimedDamage = .25f;
 
         private NetworkIdentity nId;
         private EstadoDoPersonagem estado = EstadoDoPersonagem.aPasseio;
         private float contadorDoTempo = 0;
+
+        
+        public int ConnectionID { get => connectionID; set => connectionID = value; }
 
         // Start is called before the first frame update
         void Start()
@@ -40,15 +46,16 @@ namespace MyTestMirror
 
             if (nId.isLocalPlayer)
             {
-
-                CameraAplicator.cam.NewFocusForBasicCam(transform, 30, 10);
+                
+                CameraAplicator.cam.NewFocusForBasicCam(transform, 25, 10);
                 EventAgregator.Publish(new GameEvent(EventKey.desligarHudMirror));
 
                 EventAgregator.AddListener(EventKey.sendChangePlayerName, OnChangePlayerName);
                 EventAgregator.AddListener(EventKey.enterInTimedDamage, OnEnterInTimedDamage);
                 EventAgregator.AddListener(EventKey.exitInTimedDamage, OnExitInTimedDamage);
+                EventAgregator.AddListener(EventKey.requestChangeDates, OnRequestChangeDates);
 
-                NetworkClient.RegisterHandler<ChangePlayerNameMessage>(OnRequestChangeName);
+                //NetworkClient.RegisterHandler<ChangePlayerNameMessage>(OnRequestChangeName);
                 NetworkClient.RegisterHandler<StandardDamageMessage>(OnReceiveStandardDamage);
                 dados.StManager.OnChangeStaminaPoints += () => {
                     EventAgregator.PublishGameEvent(EventKey.networkSendEvent,EventKey.changeStaminaPoint,
@@ -67,9 +74,19 @@ namespace MyTestMirror
                 EventAgregator.RemoveListener(EventKey.sendChangePlayerName, OnChangePlayerName);
                 EventAgregator.RemoveListener(EventKey.enterInTimedDamage, OnEnterInTimedDamage);
                 EventAgregator.RemoveListener(EventKey.exitInTimedDamage, OnExitInTimedDamage);
+                EventAgregator.RemoveListener(EventKey.requestChangeDates, OnRequestChangeDates);
                 NetworkClient.UnregisterHandler<StandardDamageMessage>();                
                 NetworkClient.UnregisterHandler<ChangePlayerNameMessage>();
             }
+        }
+
+        private void OnRequestChangeDates(IGameEvent obj)
+        {
+            CmdName(nomeJogador);
+            EventAgregator.PublishGameEvent(EventKey.networkSendEvent, EventKey.changeLifePoints,
+                nId.netId, dados.LifePoints, dados.MaxLifePoints);
+            EventAgregator.PublishGameEvent(EventKey.networkSendEvent, EventKey.changeStaminaPoint,
+                nId.netId, dados.StManager.StaminaPoints, dados.StManager.MaxStaminaPoints);
         }
 
         private void OnExitInTimedDamage(IGameEvent e)
@@ -81,14 +98,6 @@ namespace MyTestMirror
         private void OnEnterInTimedDamage(IGameEvent e)
         {
             timedDamage = true;
-        }
-
-        private void OnRequestChangeName(NetworkConnection arg1, ChangePlayerNameMessage arg2)
-        {
-            if ((int)arg2.MySendObjects[0] != nId.connectionToClient.connectionId)
-            {
-                CmdName(nomeJogador);
-            }
         }
 
         #region Suprimido
@@ -112,7 +121,6 @@ namespace MyTestMirror
         [ClientRpc]
         void RpcT(string nome)
         {
-
             nomeJogador = nome;
             EventAgregator.Publish(new GameEvent(EventKey.changePlayerName, nomeJogador, transform));
         }
@@ -156,8 +164,9 @@ namespace MyTestMirror
                 && mgAttack.IniciarAtaqueSePodeAtacar())
             {
 
-                thisControl.ModificarOndeChegar(transform.position);
+                //thisControl.ModificarOndeChegar(transform.position);
                 CmdIniciarAtk();
+                thisControl.Mov.UseSlowSpeed = true;
 
             }
 
@@ -275,9 +284,11 @@ namespace MyTestMirror
                         }
                     break;
                     case EstadoDoPersonagem.emAtk:
+                        thisControl.UpdatePosition(distanciaChecaMovimento);
                         if (atkManager.UpdateAttack())
                         {
                             CmdResetAtkManager();
+                            thisControl.Mov.UseSlowSpeed = false;
                         }
                     break;
                     case EstadoDoPersonagem.emMgAtk:

@@ -4,6 +4,8 @@ using UnityEngine.UI;
 using FayvitEventAgregator;
 using System;
 using Mirror;
+using FayvitSupportSingleton;
+using System.Data.SqlTypes;
 
 public class ViewDatesHud : MonoBehaviour
 {
@@ -17,6 +19,13 @@ public class ViewDatesHud : MonoBehaviour
         EventAgregator.AddListener(EventKey.changeLifePoints, OnChangeLifePoints);
         EventAgregator.AddListener(EventKey.changeStaminaPoint, OnChangeStaminaPoints);
         EventAgregator.AddListener(EventKey.changePlayerName, OnChangePlayerName);
+
+        //NetworkIdentity nid = transform.parent.GetComponent<NetworkIdentity>();
+
+        SupportSingleton.Instance.InvokeOnEndFrame(() =>
+        {
+            EventAgregator.PublishGameEvent(EventKey.networkSendEvent, EventKey.requestChangeDates);
+        });
     }
 
 

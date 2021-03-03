@@ -2,6 +2,8 @@
 using FayvitEventAgregator;
 using System.Collections.Generic;
 using Mirror;
+using FayvitSupportSingleton;
+using MyTestMirror;
 
 public class MyConnectManager : NetworkManager//MonoBehaviourPunCallbacks
 {
@@ -68,6 +70,31 @@ public class MyConnectManager : NetworkManager//MonoBehaviourPunCallbacks
         
     }
 
+    bool FullyConnected() => NetworkClient.active && ClientScene.ready;
+
+    // should we use the client to listen connection?
+    bool UseClientToListen()
+    {
+        return !isHeadless && !NetworkServer.active && !FullyConnected();
+    }
+
+    public void TentaColocarNome(NetworkConnection conn)
+    {
+        if (FullyConnected())
+        {
+            Debug.Log("Enviou");
+            NetworkServer.SendToAll(new ChangePlayerNameMessage() { MySendObjects = { conn.connectionId } }); ;
+        }
+        else
+        {
+            Debug.Log("repetindo");
+            SupportSingleton.Instance.InvokeInRealTime(() => {
+                Debug.Log("dentro do repetindo");
+                TentaColocarNome(conn);
+            }, .25f);
+        }
+    }
+
     public override void OnServerAddPlayer(NetworkConnection conn)
     {
         Vector3 pos = new Vector3(
@@ -75,16 +102,17 @@ public class MyConnectManager : NetworkManager//MonoBehaviourPunCallbacks
                 Random.Range(-9, 9)
                 );
         GameObject player = Instantiate(spawnPrefabs[0], pos, Quaternion.identity);
+        player.GetComponent<CharacterManager>().ConnectionID = conn.connectionId;
+        GameObject G = player.GetComponentInChildren<NetworkAnimator>().gameObject;
+        NetworkServer.AddPlayerForConnection(conn, player);
+
+        GameObject commSender = Instantiate(spawnPrefabs[2], pos, Quaternion.identity);
+        NetworkServer.Spawn(commSender,conn);
 
         if (conn != NetworkServer.localConnection)
-            NetworkServer.SendToAll(new ChangePlayerNameMessage() { MySendObjects = { conn.connectionId } }); ;
+            TentaColocarNome(conn);
 
         
-            GameObject commSender = Instantiate(spawnPrefabs[2], pos, Quaternion.identity);
-            NetworkServer.Spawn(commSender,conn);            
-        
-
-        NetworkServer.AddPlayerForConnection(conn, player);
     }
 
     

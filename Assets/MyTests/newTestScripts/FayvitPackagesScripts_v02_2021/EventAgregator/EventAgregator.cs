@@ -111,6 +111,7 @@ namespace FayvitEventAgregator
         addNewPlayer = 32,
         enterInTimedDamage = 33,
         exitInTimedDamage = 34,
-        requestViewFiredamage = 35
+        requestViewFiredamage = 35,
+        requestChangeDates = 36
     }
 }

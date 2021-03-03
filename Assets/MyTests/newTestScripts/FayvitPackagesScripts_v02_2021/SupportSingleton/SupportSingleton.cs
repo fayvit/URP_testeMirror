@@ -32,11 +32,28 @@ namespace FayvitSupportSingleton
 
             if (g.Length > 1)
                 Destroy(gameObject);
+            else
+                instance = this;
         }
 
         public void InvokeInRealTime(System.Action acao, float time)
         {
             StartCoroutine(RealTimeCall(time, acao));
+        }
+
+        public void InvokeInSeconds(GameObject G,System.Action acao, float time)
+        {
+            StartCoroutine(TimeCallWithGO(G,time, acao));
+        }
+
+        public void InvokeInRealTime(GameObject G,System.Action acao, float time)
+        {
+            StartCoroutine(RealTimeCallWithGO(G,time, acao));
+        }
+
+        public void InvokeInSeconds(System.Action acao, float time)
+        {
+            StartCoroutine(TimeCall(time, acao));
         }
 
         public void InvokeOnCountFrame(System.Action acao,uint count=1)
@@ -94,6 +111,27 @@ namespace FayvitSupportSingleton
         {
             yield return new WaitForSecondsRealtime(time);
             s();
+        }
+
+        IEnumerator RealTimeCallWithGO(GameObject G,float time, System.Action s)
+        {
+            yield return new WaitForSecondsRealtime(time);
+            if (G != null)
+                s();
+        }
+
+        IEnumerator TimeCall(float time, System.Action s)
+        {
+            yield return new WaitForSeconds(time);
+            s();
+        }
+
+        IEnumerator TimeCallWithGO(GameObject G,float time, System.Action s)
+        {
+            yield return new WaitForSeconds(time);
+
+            if(G!=null)
+                s();
         }
 
 

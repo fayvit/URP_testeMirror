@@ -117,7 +117,7 @@ public class ControlledMoveForCharacter
         }
         else
         {
-            Debug.Log("PathNUll");
+            //Debug.Log("PathNUll");
             return true;            
         }
         return retorno;
