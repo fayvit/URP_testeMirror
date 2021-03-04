@@ -40,8 +40,6 @@ public class ViewDatesHud : MonoBehaviour
     {
         NetworkIdentity nId = NetworkIdentity.spawned[(uint)obj.MySendObjects[0]];
 
-        Debug.Log(nId);
-
         //Transform T = NetworkManager.singleton.sp
         if (nId.transform == transform.parent)
         {
@@ -55,8 +53,6 @@ public class ViewDatesHud : MonoBehaviour
     {
         NetworkIdentity nId = NetworkIdentity.spawned[(uint)obj.MySendObjects[0]];
         //ClientScene.spawnableObjects[(ulong)obj.MySendObjects[0]];
-
-        Debug.Log(nId);
 
         //Transform T = NetworkManager.singleton.sp
         if (nId.transform == transform.parent)

@@ -19,7 +19,6 @@ public class DamageTrigger : NetworkBehaviour
     {
         if (other.gameObject != Dono)
         {
-            Debug.Log("damage trigger: " + gameObject);
             EventAgregator.Publish(new GameEvent(EventKey.bulletDamage, transform.position, other.gameObject, Dono, transform.forward));
 
         }
