@@ -4,6 +4,7 @@ using UnityEngine;
 using FayvitEventAgregator;
 using FayvitSupportSingleton;
 using System;
+using UnityEditor;
 
 namespace MyTestMirror
 {
@@ -247,7 +248,7 @@ namespace MyTestMirror
         [Command]
         void CmdShoot(Vector3 V)
         {
-            Vector3 pos = transform.position + transform.forward;
+            Vector3 pos = transform.position + transform.forward+1.75f*Vector3.up;
             Quaternion rot = Quaternion.LookRotation(V);
             BulletBehaviour G2 = Instantiate(NetworkManager.singleton.spawnPrefabs[1].GetComponent<BulletBehaviour>(), pos, rot);
             G2.Dono = gameObject;
@@ -304,6 +305,8 @@ namespace MyTestMirror
 
                 VerifyApplyTimedDamage();
             }
+
+
         }
 
         void VerifyApplyTimedDamage()
@@ -332,3 +335,4 @@ namespace MyTestMirror
     
     } 
 }
+

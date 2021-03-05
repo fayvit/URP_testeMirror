@@ -32,9 +32,9 @@ public class BulletBehaviour : NetworkBehaviour
     [ServerCallback]
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject != Dono)
+        if (other.gameObject != Dono && other.gameObject.CompareTag("Player"))
         {
-            
+
             EventAgregator.Publish(new GameEvent(EventKey.bulletDamage,transform.position,other.gameObject,Dono,transform.forward));
 
             NetworkServer.Destroy(gameObject);

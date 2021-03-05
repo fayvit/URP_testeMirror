@@ -70,6 +70,7 @@
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v02_2021\CommandReaderSpace\CommandReader.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v02_2021\MyUI_Space\MyUiObjects\ConfirmationPanelBehaviour.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v02_2021\CommandReaderSpace\ICommandReader.cs" />
+    <Compile Include="Assets\MyTests\newTestScripts\MainScripts\CharacterAnimationListener.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v02_2021\Movimentacao\BasicMove.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v02_2021\CommandReaderSpace\Android\DragSupport.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v02_2021\CommandReaderSpace\KeyStringDict.cs" />
@@ -138,7 +139,6 @@
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v02_2021\MyUI_Space\ParentingInTheHUD.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v02_2021\Camera\InducedDirection.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v02_2021\Camera\FayvitCameraSupport.cs" />
-    <Compile Include="Assets\MyTests\newTestScripts\MainScripts\CharacterAnimationListener.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Mirror\Plugins\Mono.Cecil\Mono.CecilX.dll" />
@@ -153,6 +153,7 @@
      <None Include="Assets\Mirror\Readme.txt" />
      <None Include="Assets\FSP\MAST\License.txt" />
      <None Include="Assets\StreamingAssets\TestResults.xml" />
+     <None Include="Assets\MyTests\Art\Particles\Sources\Shaders\Particle Alpha Blend (Queue +100).shader" />
      <None Include="Assets\ScriptTemplates\52-Mirror__Network Behaviour-NewNetworkBehaviour.cs.txt" />
      <None Include="Assets\FSP\MAST\Etc\FSP Grid Shader.shader" />
      <None Include="Assets\Mirror\Plugins\Mono.Cecil\License.txt" />
