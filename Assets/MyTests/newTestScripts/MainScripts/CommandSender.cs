@@ -13,25 +13,54 @@ public class CommandSender : NetworkBehaviour
         var nId = GetComponent<NetworkIdentity>();
 
         if (nId.hasAuthority)
-            EventAgregator.AddListener(EventKey.networkSendEvent,OnNetworkSendEvent);
-    }
+        {
+            EventAgregator.AddListener(EventKey.networkSendRpcEvent, OnNetworkSendEvent);
+            EventAgregator.AddListener(EventKey.requestServerEvent, OnRequestServerEvent);
+        }
+        }
 
     private void OnDestroy()
     {
         var nId = GetComponent<NetworkIdentity>();
         if (nId.hasAuthority)
-            EventAgregator.RemoveListener(EventKey.networkSendEvent, OnNetworkSendEvent);
+        {
+            EventAgregator.RemoveListener(EventKey.networkSendRpcEvent, OnNetworkSendEvent);
+            EventAgregator.RemoveListener(EventKey.requestServerEvent, OnRequestServerEvent);
+        }
     }
 
-    private void OnNetworkSendEvent(IGameEvent obj)
+    private void OnRequestServerEvent(IGameEvent obj)
+    {
+        CmdServerEvent(ConvertEventObjectToByte(obj));
+    }
+
+    byte[] ConvertEventObjectToByte(IGameEvent obj)
     {
         List<object> o = new List<object>();
         for (int i = 0; i < obj.MySendObjects.Length; i++)
             o.Add(obj.MySendObjects[i]);
 
-        byte[] b = BytesToObject.ObjectForBytes(o);
+        return  BytesToObject.ObjectForBytes(o);
+    }
 
-        CmdSendEvent(b);
+    void PublishEventWithBytes(byte[] b)
+    {
+        List<object> o = BytesToObject.ObjectWithBytes(b);
+        EventKey k = (EventKey)o[0];
+        o.RemoveAt(0);
+
+        EventAgregator.PublishGameEvent(o.ToArray(), k);
+    }
+
+    private void OnNetworkSendEvent(IGameEvent obj)
+    {
+        CmdSendEvent(ConvertEventObjectToByte(obj));
+    }
+
+    [Command]
+    void CmdServerEvent(byte[] b)
+    {
+        PublishEventWithBytes(b);
     }
 
     [Command]
@@ -43,10 +72,6 @@ public class CommandSender : NetworkBehaviour
     [ClientRpc]
     void RpcSendEvent(byte[] b)
     {
-        List<object> o = BytesToObject.ObjectWithBytes(b);
-        EventKey k = (EventKey)o[0];
-        o.RemoveAt(0);
-
-        EventAgregator.PublishGameEvent(o.ToArray(),k);
+        PublishEventWithBytes(b);
     }
 }

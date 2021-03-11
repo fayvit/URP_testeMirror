@@ -2,7 +2,6 @@
 using FayvitEventAgregator;
 using System.Collections.Generic;
 using Mirror;
-using FayvitSupportSingleton;
 using MyTestMirror;
 
 public class MyConnectManager : NetworkManager//MonoBehaviourPunCallbacks
@@ -70,30 +69,20 @@ public class MyConnectManager : NetworkManager//MonoBehaviourPunCallbacks
         
     }
 
-    bool FullyConnected() => NetworkClient.active && ClientScene.ready;
-
-    // should we use the client to listen connection?
-    bool UseClientToListen()
-    {
-        return !isHeadless && !NetworkServer.active && !FullyConnected();
-    }
-
-    public void TentaColocarNome(NetworkConnection conn)
-    {
-        if (FullyConnected())
-        {
-            Debug.Log("Enviou");
-            NetworkServer.SendToAll(new ChangePlayerNameMessage() { MySendObjects = { conn.connectionId } }); ;
-        }
-        else
-        {
-            Debug.Log("repetindo");
-            SupportSingleton.Instance.InvokeInRealTime(() => {
-                Debug.Log("dentro do repetindo");
-                TentaColocarNome(conn);
-            }, .25f);
-        }
-    }
+    //public void TentaColocarNome(NetworkConnection conn)
+    //{
+    //    if (FullyConnected())
+    //    {
+    //    }
+    //    else
+    //    {
+            
+    //        SupportSingleton.Instance.InvokeInRealTime(() => {
+                
+    //            TentaColocarNome(conn);
+    //        }, .25f);
+    //    }
+    //}
 
     public override void OnServerAddPlayer(NetworkConnection conn)
     {
@@ -109,10 +98,8 @@ public class MyConnectManager : NetworkManager//MonoBehaviourPunCallbacks
         GameObject commSender = Instantiate(spawnPrefabs[2], pos, Quaternion.identity);
         NetworkServer.Spawn(commSender,conn);
 
-        if (conn != NetworkServer.localConnection)
-            TentaColocarNome(conn);
-
-        
+        //if (conn != NetworkServer.localConnection)
+        //    TentaColocarNome(conn);
     }
 
     

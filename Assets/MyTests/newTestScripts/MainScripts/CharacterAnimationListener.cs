@@ -1,8 +1,6 @@
-using FayvitEventAgregator;
+using FayvitMessageAgregator;
+using FayvitMove;
 using Mirror;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterAnimationListener : MonoBehaviour
@@ -20,24 +18,35 @@ public class CharacterAnimationListener : MonoBehaviour
         if (nid.isLocalPlayer)
         {
             meuAnimator = GetComponent<Animator>();
-            EventAgregator.AddListener(EventKey.changeMoveSpeed, OnChangeMoveSpeed);
+            //EventAgregator.AddListener(EventKey.changeMoveSpeed, OnChangeMoveSpeed);
+            MessageAgregator<ChangeMoveSpeedMessage>.AddListener(OnChangeMoveSpeed);
         }
         else
             enabled = false;
     }
 
-    private void OnChangeMoveSpeed(IGameEvent obj)
+    private void OnChangeMoveSpeed(ChangeMoveSpeedMessage obj)
     {
-        if (((GameObject)obj.MySendObjects[0]).gameObject == gameObject)
+        if (obj.gameObject == gameObject)
         {
-            float f = ((Vector3)obj.MySendObjects[1]).magnitude;
+            float f = obj.velocity.magnitude;
             meuAnimator.SetFloat("Vel", f);
         }
     }
 
+    //private void OnChangeMoveSpeed(IGameEvent obj)
+    //{
+    //    if (((GameObject)obj.MySendObjects[0]).gameObject == gameObject)
+    //    {
+    //        float f = ((Vector3)obj.MySendObjects[1]).magnitude;
+    //        meuAnimator.SetFloat("Vel", f);
+    //    }
+    //}
+
     private void OnDestroy()
     {
-        EventAgregator.RemoveListener(EventKey.changeMoveSpeed, OnChangeMoveSpeed);
+        //EventAgregator.RemoveListener(EventKey.changeMoveSpeed, OnChangeMoveSpeed);
+        MessageAgregator<ChangeMoveSpeedMessage>.RemoveListener(OnChangeMoveSpeed);
     }
 
     // Update is called once per frame

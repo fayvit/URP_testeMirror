@@ -1,6 +1,8 @@
 ﻿using FayvitMove;
-using FayvitEventAgregator;
+using FayvitCam;
+using FayvitMessageAgregator;
 using UnityEngine;
+
 
 [System.Serializable]
 public class SimpleKnowbackManager
@@ -20,7 +22,12 @@ public class SimpleKnowbackManager
         tempoDecorrido = 0;
         dirDeRepulsao = dirDano.normalized;
 
-        EventAgregator.Publish(new GameEvent(EventKey.requestShakeCam, ShakeAxis.xy, 5, .25f));
+        MessageAgregator<RequestShakeCamMessage>.Publish(new RequestShakeCamMessage() { 
+        shakeAxis = ShakeAxis.xy,
+        numShake = 5,
+        shakeAngle = .25f
+        });
+        //EventAgregator.Publish(new GameEvent(EventKey.requestShakeCam, ShakeAxis.xy, 5, .25f));
 
     }
 

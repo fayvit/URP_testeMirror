@@ -2,10 +2,8 @@
 using System.Collections;
 using UnityEngine.UI;
 using FayvitEventAgregator;
-using System;
 using Mirror;
 using FayvitSupportSingleton;
-using System.Data.SqlTypes;
 
 public class ViewDatesHud : MonoBehaviour
 {
@@ -24,7 +22,7 @@ public class ViewDatesHud : MonoBehaviour
 
         SupportSingleton.Instance.InvokeOnEndFrame(() =>
         {
-            EventAgregator.PublishGameEvent(EventKey.networkSendEvent, EventKey.requestChangeDates);
+            EventAgregator.PublishGameEvent(EventKey.networkSendRpcEvent, EventKey.requestChangeDates);
         });
     }
 

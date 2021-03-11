@@ -118,6 +118,11 @@ public abstract class MyGameMessage : IMessageBase
 
 public static class BytesToObject
 {
+    public static byte[] OneObjectForBytes(object MySendObjects)
+    {
+        return ObjectForBytes(new List<object>() { MySendObjects });
+    }
+
     public static byte[] ObjectForBytes(List<object> MySendObjects)
     {
         MemoryStream ms = new MemoryStream();
@@ -126,6 +131,11 @@ public static class BytesToObject
         bf.Serialize(ms, MySendObjects);
 
         return ms.ToArray();
+    }
+
+    public static T OneObjectWithBytes<T>(byte[] b)
+    {
+        return (T)ObjectWithBytes(b)[0];
     }
 
     public static List<object> ObjectWithBytes(byte[] b)

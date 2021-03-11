@@ -2,9 +2,7 @@
 using Mirror;
 using UnityEngine;
 using FayvitEventAgregator;
-using FayvitSupportSingleton;
-using System;
-using UnityEditor;
+using FayvitMove;
 
 namespace MyTestMirror
 {
@@ -56,12 +54,11 @@ namespace MyTestMirror
                 EventAgregator.AddListener(EventKey.exitInTimedDamage, OnExitInTimedDamage);
                 EventAgregator.AddListener(EventKey.requestChangeDates, OnRequestChangeDates);
 
-                //NetworkClient.RegisterHandler<ChangePlayerNameMessage>(OnRequestChangeName);
                 NetworkClient.RegisterHandler<StandardDamageMessage>(OnReceiveStandardDamage);
+
                 dados.StManager.OnChangeStaminaPoints += () => {
-                    EventAgregator.PublishGameEvent(EventKey.networkSendEvent,EventKey.changeStaminaPoint,
+                    EventAgregator.PublishGameEvent(EventKey.networkSendRpcEvent,EventKey.changeStaminaPoint,
                         nId.netId, dados.StManager.StaminaPoints, dados.StManager.MaxStaminaPoints);
-                    //CmdChangeStaminaPoints(dados.StManager.StaminaPoints, dados.StManager.MaxStaminaPoints);
                 };
             }
 
@@ -77,16 +74,15 @@ namespace MyTestMirror
                 EventAgregator.RemoveListener(EventKey.exitInTimedDamage, OnExitInTimedDamage);
                 EventAgregator.RemoveListener(EventKey.requestChangeDates, OnRequestChangeDates);
                 NetworkClient.UnregisterHandler<StandardDamageMessage>();                
-                NetworkClient.UnregisterHandler<ChangePlayerNameMessage>();
             }
         }
 
         private void OnRequestChangeDates(IGameEvent obj)
         {
             CmdName(nomeJogador);
-            EventAgregator.PublishGameEvent(EventKey.networkSendEvent, EventKey.changeLifePoints,
+            EventAgregator.PublishGameEvent(EventKey.networkSendRpcEvent, EventKey.changeLifePoints,
                 nId.netId, dados.LifePoints, dados.MaxLifePoints);
-            EventAgregator.PublishGameEvent(EventKey.networkSendEvent, EventKey.changeStaminaPoint,
+            EventAgregator.PublishGameEvent(EventKey.networkSendRpcEvent, EventKey.changeStaminaPoint,
                 nId.netId, dados.StManager.StaminaPoints, dados.StManager.MaxStaminaPoints);
         }
 
@@ -201,7 +197,7 @@ namespace MyTestMirror
 
             dados.ApplyDamage(10);
             //CmdUpdateLifePoints(dados.LifePoints, dados.MaxLifePoints);
-            EventAgregator.PublishGameEvent(EventKey.networkSendEvent, EventKey.changeLifePoints, nId.netId, 
+            EventAgregator.PublishGameEvent(EventKey.networkSendRpcEvent, EventKey.changeLifePoints, nId.netId, 
                 dados.LifePoints, dados.MaxLifePoints
                 );
         }
@@ -319,7 +315,7 @@ namespace MyTestMirror
                     contadorDoTempo = intervalTimedDamage;
                     dados.ApplyDamage(4);
                     //CmdUpdateLifePoints(dados.LifePoints, dados.MaxLifePoints);
-                    EventAgregator.PublishGameEvent(EventKey.networkSendEvent, EventKey.changeLifePoints, nId.netId,
+                    EventAgregator.PublishGameEvent(EventKey.networkSendRpcEvent, EventKey.changeLifePoints, nId.netId,
                             dados.LifePoints, dados.MaxLifePoints
                         );
                     CmdView(transform.position);
