@@ -78,6 +78,7 @@
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\CommandReaderSpace\Android\DragSupport.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\CommandReaderSpace\KeyStringDict.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\EventAgregator\GameEvent.cs" />
+    <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\MyUI_Space\FayvitUiMessages.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\Camera\FightCam.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\MyUI_Space\MyUiObjects\TextDisplayBehaviour.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\Camera\ShakeCam.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\Camera\FocarAdversario.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\TesteUi_listServer\PanelServerSettings.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\MainScripts\RotateToCamera.cs" />
+    <Compile Include="Assets\MyTests\newTestScripts\TesteUi_listServer\NetPLaySceneLoader.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\MyUI_Space\GridMenu.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\Camera\CameraAplicator.cs" />
     <Compile Include="Assets\MyTests\testScripts\ListServerTest\ListServerFacade.cs" />
@@ -110,19 +112,24 @@
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\CommandReaderSpace\AndroidCommandReader.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\TesteUi_listServer\TesteCreationUIForListServer.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\MyUI_Space\FayvitUiUtility.cs" />
+    <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\Movimentacao\FayvitMoveMessages.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\CommandReaderSpace\Keyboard\KeyboardKeysDict.cs" />
     <Compile Include="Assets\MyTests\testScripts\ListServerTest\ListServerFrontEnd.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\MyUI_Space\A_MenuOption.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\MainScripts\MyConnectManager.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\MyUI_Space\WrapUiAnchor.cs" />
+    <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\CommandReaderSpace\CommandReaderMessages.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\MyUI_Space\MyUiObjects\GridMenuBehaviour.cs" />
+    <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\Camera\CamMessages.cs" />
     <Compile Include="Assets\FSP\MAST\Scripts\Shared\MAST_Asset_Loader.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\MainScripts\HudMirror.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\CommandReaderSpace\ChangeController.cs" />
+    <Compile Include="Assets\MyTests\newTestScripts\Auxiliares\AnimacaoDeSpriteParaUI.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\MainScripts\StaminaManager.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\MainScripts\Command_RPC_Manager.cs" />
     <Compile Include="Assets\FSP\MAST\Scripts\Shared\MAST_Const.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\CommandReaderSpace\Android\ControladorDeJoystick.cs" />
+    <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\MessageAgregator\MessageAgregator.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\Camera\ExhibitionistCam .cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\MyUI_Space\BasicMenu.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\MyUI_Space\AnOption.cs" />
@@ -150,11 +157,7 @@
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\MyUI_Space\ParentingInTheHUD.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\Camera\InducedDirection.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\Camera\FayvitCameraSupport.cs" />
-    <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\MessageAgregator\MessageAgregator.cs" />
-    <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\Camera\CamMessages.cs" />
-    <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\CommandReaderSpace\CommandReaderMessages.cs" />
-    <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\Movimentacao\FayvitMoveMessages.cs" />
-    <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\MyUI_Space\FayvitUiMessages.cs" />
+    <Compile Include="Assets\MyTests\newTestScripts\MainScripts\ViewDatesHudPlayerDatesVersion.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Mirror\Plugins\Mono.Cecil\Mono.CecilX.dll" />

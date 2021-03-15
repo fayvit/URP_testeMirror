@@ -1,3 +1,4 @@
+using FayvitEventAgregator;
 using FayvitUI;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,6 +21,14 @@ public class A_RoomListOption : AnOption
         {
             nameOfPlayer.gameObject.SetActive(false);
             inputForName.gameObject.SetActive(true);
+            inputForName.onEndEdit.AddListener((string s)=> {
+                Pronto();
+            });
+        }
+        else if (owner && isReady)
+        {
+            nameOfPlayer.gameObject.SetActive(true);
+            inputForName.gameObject.SetActive(false);
         }
 
         if (owner)
@@ -33,8 +42,8 @@ public class A_RoomListOption : AnOption
 
         
         btnKick.gameObject.SetActive(isServer&&!owner);
-        btnPronto.gameObject.SetActive(owner);
-        btnEditar.gameObject.SetActive(isReady);
+        btnPronto.gameObject.SetActive(owner&&!isReady);
+        btnEditar.gameObject.SetActive(owner&&isReady);
 
         btnKick.onClick.RemoveAllListeners();
         btnKick.onClick.AddListener(Kick);
@@ -50,16 +59,19 @@ public class A_RoomListOption : AnOption
     {
         btnPronto.gameObject.SetActive(false);
         btnEditar.gameObject.SetActive(true);
+        EventAgregator.PublishGameEvent(EventKey.clickPlayerReady,inputForName.text);
     }
 
     void Editar()
     {
         btnPronto.gameObject.SetActive(true);
         btnEditar.gameObject.SetActive(false);
+        EventAgregator.PublishGameEvent(EventKey.clickInEditPlayer);
     }
 
     void Kick()
-    { 
-    
+    {
+        int x = transform.GetSiblingIndex() - 1;
+        EventAgregator.PublishGameEvent(EventKey.clickInKickPlayer,x);
     }
 }

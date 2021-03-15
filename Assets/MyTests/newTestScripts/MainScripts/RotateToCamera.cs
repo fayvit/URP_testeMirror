@@ -14,6 +14,9 @@ public class RotateToCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (daCamera == null)
+            Start();
+
         transform.rotation = Quaternion.LookRotation(daCamera.forward);
     }
 }

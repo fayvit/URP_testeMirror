@@ -5,13 +5,16 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+  - enabled: 0
+    path: Assets/MyTests/Scenes/NewTestScene.unity
+    guid: 7e3d8aa357a9df149b1b52cdd5f3e427
   - enabled: 1
     path: Assets/MyTests/Scenes/MyListServerScene.unity
     guid: af5ca9c7f128c5046a360b69d15d6e4a
   - enabled: 1
-    path: Assets/Mirror/Examples/AdditiveScenes/Scenes/SubScene.unity
-    guid: 7f4fd683fc6d866418c95f99977533a6
+    path: Assets/MyTests/Scenes/ForLoadGameScene.unity
+    guid: fe7718e1aaa772d40ac05ab79dd6e198
   - enabled: 1
-    path: Assets/Mirror/Examples/AdditiveScenes/Scenes/MainScene.unity
-    guid: 7a0eee2f518e9dc4fb628d96dc452faf
+    path: Assets/MyTests/Scenes/LoadScene.unity
+    guid: d40b961951fe0be47b3886a327f33f4e
   m_configObjects: {}

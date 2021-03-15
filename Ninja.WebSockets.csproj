@@ -62,9 +62,9 @@
     <Compile Include="Assets\Mirror\Runtime\Transport\Websocket\Ninja.WebSockets\Internal\Events.cs" />
     <Compile Include="Assets\Mirror\Runtime\Transport\Websocket\Ninja.WebSockets\Internal\WebSocketImplementation.cs" />
     <Compile Include="Assets\Mirror\Runtime\Transport\Websocket\Ninja.WebSockets\Internal\WebSocketFrameWriter.cs" />
-    <Compile Include="Assets\Mirror\Runtime\Transport\Websocket\Ninja.WebSockets\WebSocketServerOptions.cs" />
     <Compile Include="Assets\Mirror\Runtime\Transport\Websocket\Ninja.WebSockets\Internal\BinaryReaderWriter.cs" />
     <Compile Include="Assets\Mirror\Runtime\Transport\Websocket\Ninja.WebSockets\Exceptions\EntityTooLargeException.cs" />
+    <Compile Include="Assets\Mirror\Runtime\Transport\Websocket\Ninja.WebSockets\WebSocketServerOptions.cs" />
     <Compile Include="Assets\Mirror\Runtime\Transport\Websocket\Ninja.WebSockets\PongEventArgs.cs" />
     <Compile Include="Assets\Mirror\Runtime\Transport\Websocket\Ninja.WebSockets\Internal\WebSocketFrameCommon.cs" />
     <Compile Include="Assets\Mirror\Runtime\Transport\Websocket\Ninja.WebSockets\WebSocketHttpContext.cs" />

@@ -1,31 +1,24 @@
-﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 using FayvitEventAgregator;
 using Mirror;
-using FayvitSupportSingleton;
 
-public class ViewDatesHud : MonoBehaviour
+public class ViewDatesHudPlayerDatesVersion : MonoBehaviour
 {
     [SerializeField] private Image hpImage;
     [SerializeField] private Image stImage;
     [SerializeField] private Text playerName;
 
-    // Use this for initialization
+
+    // Start is called before the first frame update
     void Start()
     {
         EventAgregator.AddListener(EventKey.changeLifePoints, OnChangeLifePoints);
         EventAgregator.AddListener(EventKey.changeStaminaPoint, OnChangeStaminaPoints);
         EventAgregator.AddListener(EventKey.changePlayerName, OnChangePlayerName);
-
-        //NetworkIdentity nid = transform.parent.GetComponent<NetworkIdentity>();
-
-        SupportSingleton.Instance.InvokeOnCountFrame(() =>
-        {
-            EventAgregator.PublishGameEvent(EventKey.networkSendRpcEvent, EventKey.requestChangeDates);
-        },5);
     }
-
 
     private void OnDestroy()
     {
@@ -67,12 +60,5 @@ public class ViewDatesHud : MonoBehaviour
         {
             playerName.text = (string)obj.MySendObjects[0];
         }
-    }
-
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

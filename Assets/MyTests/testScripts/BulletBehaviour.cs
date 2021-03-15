@@ -34,6 +34,7 @@ public class BulletBehaviour : NetworkBehaviour
     {
         if (other.gameObject != Dono && other.gameObject.CompareTag("Player"))
         {
+            Debug.Log("pegou bullet");
 
             EventAgregator.Publish(new GameEvent(EventKey.bulletDamage,transform.position,other.gameObject,Dono,transform.forward));
 

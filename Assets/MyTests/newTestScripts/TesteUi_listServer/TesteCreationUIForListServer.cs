@@ -3,8 +3,6 @@ using FayvitSupportSingleton;
 using FayvitUI;
 using Mirror;
 using MyTestMirror;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -14,7 +12,6 @@ public class TesteCreationUIForListServer : MonoBehaviour
     [SerializeField] private PanelServerSettings pss;
     [SerializeField] private PanelPlayerList ppl;
     [SerializeField] private RoomListPanel rlp;
-
 
     private BasicMenu m;
     private List<PlayerDates> playerDates = new List<PlayerDates>();
@@ -42,6 +39,12 @@ public class TesteCreationUIForListServer : MonoBehaviour
         EventAgregator.AddListener(EventKey.sendPlayersDates, OnReceivePlayerDates);
         EventAgregator.AddListener(EventKey.stopClient, OnStopClient);
         EventAgregator.AddListener(EventKey.playerDisconnect, OnPlayerDisconnect);
+        EventAgregator.AddListener(EventKey.updateRoomListInfos, OnUpdateRoomListInfo);
+        EventAgregator.AddListener(EventKey.clickInEditPlayer, OnClickEditPlayerInRoomList);
+        EventAgregator.AddListener(EventKey.clickInKickPlayer, OnClickIncKickPlayer);
+        EventAgregator.AddListener(EventKey.clickPlayerReady, OnClickReadyInRoomList);
+        //EventAgregator.AddListener(EventKey.serverRequestDisconnect, OnServerRequestDisconnect);
+        EventAgregator.AddListener(EventKey.changeRoomInfoText, OnChangeRoomInfoText);
         SupportSingleton.Instance.InvokeOnEndFrame(() =>
         {
             m = SupportCreationUi.Instance.CreateBasicMenu(.25f, .45f, .75f, .95f).bMenu;
@@ -60,6 +63,63 @@ public class TesteCreationUIForListServer : MonoBehaviour
         EventAgregator.RemoveListener(EventKey.sendPlayersDates, OnReceivePlayerDates);
         EventAgregator.RemoveListener(EventKey.stopClient, OnStopClient);
         EventAgregator.RemoveListener(EventKey.playerDisconnect, OnPlayerDisconnect);
+        EventAgregator.RemoveListener(EventKey.updateRoomListInfos, OnUpdateRoomListInfo);
+        EventAgregator.RemoveListener(EventKey.clickInEditPlayer, OnClickEditPlayerInRoomList);
+        EventAgregator.RemoveListener(EventKey.clickInKickPlayer, OnClickIncKickPlayer);
+        EventAgregator.RemoveListener(EventKey.clickPlayerReady, OnClickReadyInRoomList);
+        //EventAgregator.RemoveListener(EventKey.serverRequestDisconnect, OnServerRequestDisconnect);
+        EventAgregator.RemoveListener(EventKey.changeRoomInfoText, OnChangeRoomInfoText);
+    }
+
+    private void OnChangeRoomInfoText(IGameEvent obj)
+    {
+
+        string s = (string)obj.MySendObjects[0];
+        rlp.ChangeInfoText(s);
+    }
+
+    //private void OnServerRequestDisconnect(IGameEvent obj)
+    //{
+    //    NetworkManager.singleton.StopClient();
+    //}
+
+    private void OnClickIncKickPlayer(IGameEvent obj)
+    {
+        
+        Debug.Log("OnClickKick");
+        int indice = (int)obj.MySendObjects[0];
+        NetworkServer.connections[playerDates[indice].connectionID].Disconnect(); 
+        //EventAgregator.PublishGameEvent(EventKey.requestSendToOne, playerDates[indice].netId, EventKey.serverRequestDisconnect);
+    }
+
+    void ChangeReady(bool ready,string s = "")
+    {
+        PlayerDates p = GetMyPlayerDates();
+        PlayerSoulFromNetwork.GetMyPlayerSoul().MyPlayerDate = p;
+        p.pronto = ready;
+        if (!string.IsNullOrEmpty(s))
+        {
+            p.playerName = s;
+        }
+        EventAgregator.PublishGameEvent(EventKey.requestServerEvent, EventKey.updateRoomListInfos, p);
+    }
+
+    private void OnClickEditPlayerInRoomList(IGameEvent obj)
+    {
+        ChangeReady(false);
+    }
+
+    private void OnClickReadyInRoomList(IGameEvent obj)
+    {
+        string nome = (string)obj.MySendObjects[0];
+        ChangeReady(true,nome);
+    }
+
+    private void OnUpdateRoomListInfo(IGameEvent obj)
+    {
+        PlayerDates P = (PlayerDates)obj.MySendObjects[0];
+        playerDates[GetIndexOfPlayerDatesWithId(P.netId)] = P;
+        EventAgregator.PublishGameEvent(EventKey.networkSendRpcEvent, EventKey.sendPlayersDates, playerDates);
     }
 
     private void OnPlayerDisconnect(IGameEvent obj)
@@ -95,6 +155,7 @@ public class TesteCreationUIForListServer : MonoBehaviour
     private void OnReceivePlayerDates(IGameEvent obj)
     {
         List<PlayerDates> L = (List<PlayerDates>)obj.MySendObjects[0];
+        playerDates = L;
         rlp.RestartHud(L);
     }
 
@@ -176,6 +237,9 @@ public class TesteCreationUIForListServer : MonoBehaviour
             NetworkManager.singleton.StopClient();
 
         OnBackToMainMenu(null);
+
+        playerDates = new List<PlayerDates>();
+
     }
 
     public void BackToMainMenuInListServers()
@@ -183,5 +247,36 @@ public class TesteCreationUIForListServer : MonoBehaviour
         ppl.FinishHud();
         SingletonClientTick.Instance.Finish();
         OnBackToMainMenu(null);
+    }
+
+    public void BtnIniciarJogo()
+    {
+        rlp.IniciarEstadoDeInicioDeJogo();
+    }
+
+    int GetIndexOfPlayerDatesWithId(uint netId)
+    {
+        int retorno = -1;
+        for (int i = 0; i < playerDates.Count; i++)
+        {
+            if (playerDates[i].netId == netId)
+            {
+                retorno = i;
+            }
+        }
+
+        return retorno;
+    }
+
+    PlayerDates GetMyPlayerDates()
+    {
+        PlayerDates p = new PlayerDates();
+        for (int i = 0; i < playerDates.Count; i++)
+        {
+            if (NetworkIdentity.spawned[playerDates[i].netId].isLocalPlayer)
+                p = playerDates[i];
+        }
+
+        return p;
     }
 }

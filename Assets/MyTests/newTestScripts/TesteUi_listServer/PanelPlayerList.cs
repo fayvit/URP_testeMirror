@@ -5,7 +5,6 @@ using FayvitUI;
 using UnityEngine.UI;
 using FayvitSupportSingleton;
 using MyTestMirror;
-using System;
 using System.Linq;
 
 #if UNITY_EDITOR
@@ -69,8 +68,6 @@ public class PanelPlayerList : InteractiveUiBase
 #endif
     #endregion
 
-
-
     public void ReceiveServerTick(Dictionary<string, ServerStatus> list,System.Action<int> acao)
     {
         listActive = list;
@@ -114,7 +111,7 @@ public class PanelPlayerList : InteractiveUiBase
         also.SetThisAction(acao);
         also.ServerName.text = ss.title;
         also.Jogadores.text = ss.players + " / " + ss.capacity;
-        also.Latencia.text = ss.lastLatency.ToString();
+        also.Latencia.text = ss.ping.time.ToString();
         also.IpAddress.text = ss.ip;
     }
 

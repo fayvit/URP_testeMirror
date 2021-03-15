@@ -8,7 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Linq;
 using System;
 
-public class Command_RPC_Manager : NetworkBehaviour
+public class Command_RPC_Manager : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -16,6 +16,7 @@ public class Command_RPC_Manager : NetworkBehaviour
         
         EventAgregator.AddListener(EventKey.bulletDamage, OnPlayerReceiveBulletDamage);
         EventAgregator.AddListener(EventKey.requestViewFiredamage, OnPlayerReceiveFireDamage);
+        EventAgregator.AddListener(EventKey.ViewParticlesDamage, OnRequestParticleDamageView);
     }
 
 
@@ -23,6 +24,7 @@ public class Command_RPC_Manager : NetworkBehaviour
     {
         EventAgregator.RemoveListener(EventKey.bulletDamage, OnPlayerReceiveBulletDamage);
         EventAgregator.RemoveListener(EventKey.requestViewFiredamage, OnPlayerReceiveFireDamage);
+        EventAgregator.RemoveListener(EventKey.ViewParticlesDamage, OnRequestParticleDamageView);
     }
 
     private void OnPlayerReceiveBulletDamage(IGameEvent obj)
@@ -40,25 +42,31 @@ public class Command_RPC_Manager : NetworkBehaviour
                     idDono.netId
                 } });
         }
+        SerializableVector3 sV = new SerializableVector3(pos);
+        EventAgregator.PublishGameEvent(EventKey.networkSendRpcEvent, EventKey.ViewParticlesDamage, sV, "particulaDoDano");
 
-        RpcBulletView(pos, "particulaDoDano");
+        //RpcBulletView(pos, "particulaDoDano");
     }
 
     private void OnPlayerReceiveFireDamage(IGameEvent e)
     {
         Vector3 pos = (Vector3)e.MySendObjects[0];
-        RpcBulletView(pos, "particulaDoDano_fogo");
+        SerializableVector3 sV = new SerializableVector3(pos);
+        EventAgregator.PublishGameEvent(EventKey.networkSendRpcEvent, EventKey.ViewParticlesDamage, sV, "particulaDoDano_fogo");
+        //RpcBulletView(pos, "particulaDoDano_fogo");
     }
 
-    [ClientRpc]
-    void RpcBulletView(Vector3 pos,string particula)
+    
+    void OnRequestParticleDamageView(IGameEvent e)
     {
+        Vector3 pos = ((SerializableVector3)e.MySendObjects[0]).GetV3;
+        string particula = (string)e.MySendObjects[1];
         Destroy(
             Instantiate(
                 Resources.Load<GameObject>(particula),
                 pos,
                 Quaternion.identity
-                ),3
+                ), 3
             );
     }
 
@@ -67,6 +75,12 @@ public class Command_RPC_Manager : NetworkBehaviour
     {
         
     }
+}
+
+public class SendToOneMessage : MyGameMessage
+{
+    public SendToOneMessage() : base() { }
+
 }
 
 public class ChangePlayerNameMessage : MyGameMessage

@@ -22,7 +22,7 @@ public class HudMirror : MonoBehaviour
         EventAgregator.AddListener(EventKey.iniciandoConexao, OnStartConnect);
         EventAgregator.AddListener(EventKey.conexaoRealizada, OnConnect);
         EventAgregator.AddListener(EventKey.salaCriada, OnCreateRoom);
-        EventAgregator.AddListener(EventKey.desligarHudMirror, OnRequestOffHud);
+        EventAgregator.AddListener(EventKey.starterCharacterManager, OnRequestOffHud);
         EventAgregator.AddListener(EventKey.conectandoParaJoin, OnStartConnectToJoin);
         EventAgregator.AddListener(EventKey.entrandoNoLobby, OnStartEnterLobby);
         EventAgregator.AddListener(EventKey.entrouNoLobby, OnEnterInLobby);
@@ -35,7 +35,7 @@ public class HudMirror : MonoBehaviour
         EventAgregator.RemoveListener(EventKey.iniciandoConexao, OnStartConnect);
         EventAgregator.RemoveListener(EventKey.conexaoRealizada, OnConnect);
         EventAgregator.RemoveListener(EventKey.salaCriada, OnCreateRoom);
-        EventAgregator.RemoveListener(EventKey.desligarHudMirror, OnRequestOffHud);
+        EventAgregator.RemoveListener(EventKey.starterCharacterManager, OnRequestOffHud);
         EventAgregator.RemoveListener(EventKey.conectandoParaJoin, OnStartConnectToJoin);
         EventAgregator.RemoveListener(EventKey.entrandoNoLobby, OnStartEnterLobby);
         EventAgregator.RemoveListener(EventKey.entrouNoLobby, OnEnterInLobby);
@@ -75,7 +75,7 @@ public class HudMirror : MonoBehaviour
     {
         SupportSingleton.Instance.InvokeOnCountFrame(() =>
         {
-            EventAgregator.Publish(new GameEvent(EventKey.sendChangePlayerName, NetworkClient.connection, playerNameField.text));
+            EventAgregator.Publish(new GameEvent(EventKey.sendChangePlayerName, playerNameField.text));
         },5);
 
         desligaveis.SetActive(false);

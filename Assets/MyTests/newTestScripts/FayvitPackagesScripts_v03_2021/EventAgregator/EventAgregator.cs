@@ -69,7 +69,6 @@ namespace FayvitEventAgregator
         {
             _eventDictionary = new Dictionary<EventKey, List<Action<IGameEvent>>>();
         }
-
     }
 
     public enum EventKey
@@ -92,7 +91,7 @@ namespace FayvitEventAgregator
         animateStartJump,
         animateFall,
         changeMoveSpeed,
-        desligarHudMirror,
+        starterCharacterManager,
         conectandoParaJoin,
         entrandoNoLobby,
         entrouNoLobby,
@@ -117,6 +116,21 @@ namespace FayvitEventAgregator
         requestServerEvent = 39,
         enterNewSoulPlayer = 40,
         sendPlayersDates = 41,
-        playerDisconnect = 42
+        playerDisconnect = 42,
+        updateRoomListInfos = 43,
+        clickInEditPlayer = 44,
+        clickInKickPlayer = 45,
+        clickPlayerReady = 46,
+        requestSendToOne = 47,
+        serverRequestDisconnect = 48,
+        changeRoomInfoText = 49,
+        changeCommandID = 50,
+        clientSceneLoadReady = 51,
+        requesChangeTimeScale = 52,
+        spawRealPlayer = 53,
+        requestLogMessage = 54,
+        onEditPlayerNameInListRoom = 55,
+        starterInServerCharacterManager = 56,
+        ViewParticlesDamage = 57
     }
 }

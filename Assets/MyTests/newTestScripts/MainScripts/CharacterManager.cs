@@ -3,6 +3,7 @@ using Mirror;
 using UnityEngine;
 using FayvitEventAgregator;
 using FayvitMove;
+using System;
 
 namespace MyTestMirror
 {
@@ -47,7 +48,9 @@ namespace MyTestMirror
             {
                 
                 CameraAplicator.cam.NewFocusForBasicCam(transform, 25, 10);
-                EventAgregator.Publish(new GameEvent(EventKey.desligarHudMirror));
+                EventAgregator.Publish(new GameEvent(EventKey.starterCharacterManager));
+                EventAgregator.Publish(new GameEvent(EventKey.requestServerEvent,
+                    EventKey.starterInServerCharacterManager,connectionID));
 
                 EventAgregator.AddListener(EventKey.sendChangePlayerName, OnChangePlayerName);
                 EventAgregator.AddListener(EventKey.enterInTimedDamage, OnEnterInTimedDamage);
@@ -109,6 +112,7 @@ namespace MyTestMirror
         [Command]
         void CmdName(string nome)
         {
+            Debug.Log("Chegou aqui o nome: " + nome);
             if (string.IsNullOrEmpty(nome))
                 nome = "Player: " + NetworkManager.singleton.numPlayers;
 
@@ -118,6 +122,7 @@ namespace MyTestMirror
         [ClientRpc]
         void RpcT(string nome)
         {
+            Debug.Log("Chegou aqui RPC: " + nome);
             nomeJogador = nome;
             EventAgregator.Publish(new GameEvent(EventKey.changePlayerName, nomeJogador, transform));
         }
@@ -130,9 +135,11 @@ namespace MyTestMirror
 
             if (Input.GetMouseButtonDown(0))
             {
+                Debug.Log("Input");
                 Vector3 V;
                 if (GetRaycastPoint.GetPoint(out V))
                 {
+                    Debug.Log("GetRaycastPoint");
                     thisControl.ModificarOndeChegar(V);
                     markPoint.transform.parent = null;
                     markPoint.SetActive(true);
@@ -182,9 +189,14 @@ namespace MyTestMirror
 
         }
 
+        internal void SetName(string playerName)
+        {
+            CmdName(playerName);
+        }
+
         private void OnChangePlayerName(IGameEvent e)
         {
-            CmdName((string)e.MySendObjects[1]);
+            CmdName((string)e.MySendObjects[0]);
         }
 
         private void OnReceiveStandardDamage(NetworkConnection arg1, StandardDamageMessage arg2)
@@ -246,7 +258,7 @@ namespace MyTestMirror
         {
             Vector3 pos = transform.position + transform.forward+1.75f*Vector3.up;
             Quaternion rot = Quaternion.LookRotation(V);
-            BulletBehaviour G2 = Instantiate(NetworkManager.singleton.spawnPrefabs[1].GetComponent<BulletBehaviour>(), pos, rot);
+            BulletBehaviour G2 = Instantiate(NetworkManager.singleton.spawnPrefabs[3].GetComponent<BulletBehaviour>(), pos, rot);
             G2.Dono = gameObject;
             NetworkServer.Spawn(G2.gameObject);
         }
