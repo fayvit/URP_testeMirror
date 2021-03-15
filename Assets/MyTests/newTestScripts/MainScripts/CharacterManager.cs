@@ -256,7 +256,7 @@ namespace MyTestMirror
         [Command]
         void CmdShoot(Vector3 V)
         {
-            Vector3 pos = transform.position + transform.forward+1.75f*Vector3.up;
+            Vector3 pos = transform.position + V+1.75f*Vector3.up;
             Quaternion rot = Quaternion.LookRotation(V);
             BulletBehaviour G2 = Instantiate(NetworkManager.singleton.spawnPrefabs[3].GetComponent<BulletBehaviour>(), pos, rot);
             G2.Dono = gameObject;

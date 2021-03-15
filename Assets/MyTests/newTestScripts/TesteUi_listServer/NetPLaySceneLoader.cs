@@ -65,7 +65,6 @@ namespace MyTestMirror
 
         }
 
-        
         private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
         {
             
@@ -84,8 +83,6 @@ namespace MyTestMirror
 
             }
         }
-
-
 
         private void OnUnloadScene(Scene arg0) { }
         private void OnUnloadScene(string nome)
@@ -107,8 +104,6 @@ namespace MyTestMirror
                 VerifiqueProntosParaInicio();
             }
         }
-
-
 
         // Start is called before the first frame update
         void Start()
@@ -160,8 +155,6 @@ namespace MyTestMirror
 
             NetworkServer.ReplacePlayerForConnection(NetworkServer.connections[connID], player);
         }
-
-        
 
         private int GetPlayerDatesID(int connID)
         {
@@ -236,8 +229,7 @@ namespace MyTestMirror
             if (prontos)
                 EventAgregator.PublishGameEvent(EventKey.networkSendRpcEvent, EventKey.requesChangeTimeScale, 1f);
         }
-
-        
+     
         void VerifiqueTodosProntos()
         {
             bool prontos = true;

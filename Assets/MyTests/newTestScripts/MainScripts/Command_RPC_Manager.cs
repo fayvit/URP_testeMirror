@@ -19,7 +19,6 @@ public class Command_RPC_Manager : MonoBehaviour
         EventAgregator.AddListener(EventKey.ViewParticlesDamage, OnRequestParticleDamageView);
     }
 
-
     private void OnDestroy()
     {
         EventAgregator.RemoveListener(EventKey.bulletDamage, OnPlayerReceiveBulletDamage);
@@ -56,7 +55,6 @@ public class Command_RPC_Manager : MonoBehaviour
         //RpcBulletView(pos, "particulaDoDano_fogo");
     }
 
-    
     void OnRequestParticleDamageView(IGameEvent e)
     {
         Vector3 pos = ((SerializableVector3)e.MySendObjects[0]).GetV3;

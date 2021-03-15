@@ -38,9 +38,6 @@ public class CommandSender : NetworkBehaviour
         
     }
 
-
-
-
     private void OnDestroy()
     {
         var nId = GetComponent<NetworkIdentity>();
