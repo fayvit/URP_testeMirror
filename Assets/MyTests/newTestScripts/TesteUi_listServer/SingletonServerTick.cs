@@ -5,11 +5,12 @@ using Mirror;
 using System.IO;
 using System.Text;
 using System.Net;
+using System;
 
 namespace MyTestMirror
 {
 
-    public class ServerStatus
+    public class ServerStatus:ICloneable
     {
         public string ip;
         // not all transports use a port. assume default port. feel free to also send a port if needed.
@@ -34,6 +35,11 @@ namespace MyTestMirror
             // Ping isn't known in WebGL builds
             ping = new Ping(ip);
 #endif
+        }
+
+        public object Clone()
+        {
+            return new ServerStatus(ip, port, title, players, capacity);
         }
     }
     public class SingletonServerTick : MonoBehaviour
@@ -111,6 +117,7 @@ namespace MyTestMirror
             writer.Write(titleBytes);
             writer.Flush();
 
+            Debug.Log("enviando");
             // list server only allows up to 128 bytes per message
             if (writer.BaseStream.Position <= 128)
             {
@@ -162,7 +169,7 @@ namespace MyTestMirror
         public void FinishServerTick()
         {
             OnApplicationQuit();
-
+            CancelInvoke();
             Destroy(gameObject);
         }
     }

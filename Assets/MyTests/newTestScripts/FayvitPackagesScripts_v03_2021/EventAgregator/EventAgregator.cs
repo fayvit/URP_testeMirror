@@ -131,6 +131,8 @@ namespace FayvitEventAgregator
         requestLogMessage = 54,
         onEditPlayerNameInListRoom = 55,
         starterInServerCharacterManager = 56,
-        ViewParticlesDamage = 57
+        ViewParticlesDamage = 57,
+        zeroedStamina = 58,
+        recoveryZeroedStamina = 59
     }
 }

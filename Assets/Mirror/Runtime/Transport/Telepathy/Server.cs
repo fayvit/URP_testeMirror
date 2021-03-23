@@ -89,7 +89,7 @@ namespace Telepathy
                     // dispose after thread was started but we still need it
                     // in the thread
                     TcpClient client = listener.AcceptTcpClient();
-
+                    
                     // set socket options
                     client.NoDelay = NoDelay;
                     client.SendTimeout = SendTimeout;

@@ -6,6 +6,7 @@ using Mirror;
 using FayvitSupportSingleton;
 using FayvitEventAgregator;
 using MyTestMirror;
+using System.Net.Sockets;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -125,7 +126,6 @@ public class RoomListPanel : InteractiveUiBase
 
     void RecursiveInvoke(int cont)
     {
-
         bool foi = true;
         for (int i = 0; i < l.Count; i++)
             foi &= l[i].pronto;
@@ -140,6 +140,7 @@ public class RoomListPanel : InteractiveUiBase
             {
 
                 NetPlaySceneLoader.IniciarCarregamento("ForLoadGameScene", "MyListServerScene",l);
+                SingletonServerTick.Instance.FinishServerTick();
                 
             }
             else if (l[0].pronto)

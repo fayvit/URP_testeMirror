@@ -137,9 +137,10 @@ namespace Telepathy
             //    resolves the hostname and creates either an IPv4 or an IPv6
             //    socket as needed (see TcpClient source)
             // creates IPv4 socket
-            client = new TcpClient();
+            client = new TcpClient(AddressFamily.InterNetworkV6);
             // clear internal IPv4 socket until Connect()
             client.Client = null;
+            
 
             // clear old messages in queue, just to be sure that the caller
             // doesn't receive data from last time and gets out of sync.

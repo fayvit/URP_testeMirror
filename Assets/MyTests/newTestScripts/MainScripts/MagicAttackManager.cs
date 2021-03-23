@@ -11,9 +11,11 @@ public class MagicAttackManager
     private bool estouAtacando = false;
     private AttacksTipes tipo = AttacksTipes.neutro;
 
-    private const float TEMPO_DO_ATAQUE_COMUM = 0.25f;
+    private const float TEMPO_DO_ATAQUE_COMUM = 0.05f;
     private const float INTERVALO_DE_ATAQUE = .3f;
 #pragma warning restore 0649
+
+    public uint CostStaminaPoints { get; set; } = 25;
 
     private enum AttacksTipes
     {

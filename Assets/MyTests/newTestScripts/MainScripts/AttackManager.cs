@@ -16,6 +16,8 @@ public class AttackManager
     private const float INTERVALO_DE_ATAQUE = .4f;
 #pragma warning restore 0649
 
+    public uint CostStaminaPoints { get; set; } = 45;
+
     private enum AttacksTipes
     {
         neutro = -1,

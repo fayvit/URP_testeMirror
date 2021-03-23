@@ -4,6 +4,7 @@ using UnityEngine;
 using FayvitEventAgregator;
 using FayvitMove;
 using System;
+using FayvitSupportSingleton;
 
 namespace MyTestMirror
 {
@@ -49,9 +50,14 @@ namespace MyTestMirror
                 
                 CameraAplicator.cam.NewFocusForBasicCam(transform, 25, 10);
                 EventAgregator.Publish(new GameEvent(EventKey.starterCharacterManager));
-                EventAgregator.Publish(new GameEvent(EventKey.requestServerEvent,
-                    EventKey.starterInServerCharacterManager,connectionID));
 
+                SupportSingleton.Instance.InvokeOnEndFrame(() =>
+                {
+                    EventAgregator.Publish(new GameEvent(EventKey.requestServerEvent,
+                        EventKey.starterInServerCharacterManager, connectionID));
+                });
+
+                
                 EventAgregator.AddListener(EventKey.sendChangePlayerName, OnChangePlayerName);
                 EventAgregator.AddListener(EventKey.enterInTimedDamage, OnEnterInTimedDamage);
                 EventAgregator.AddListener(EventKey.exitInTimedDamage, OnExitInTimedDamage);
@@ -63,6 +69,17 @@ namespace MyTestMirror
                     EventAgregator.PublishGameEvent(EventKey.networkSendRpcEvent,EventKey.changeStaminaPoint,
                         nId.netId, dados.StManager.StaminaPoints, dados.StManager.MaxStaminaPoints);
                 };
+                dados.StManager.OnZeroedStamina += () =>
+                {
+                    EventAgregator.PublishGameEvent(EventKey.networkSendRpcEvent, EventKey.zeroedStamina, netId);
+                };
+                dados.StManager.OnRegenZeroedStamina += () =>
+                {
+                    EventAgregator.PublishGameEvent(EventKey.networkSendRpcEvent, EventKey.recoveryZeroedStamina, netId);
+                };
+                 
+                
+                  
             }
 
             
@@ -131,22 +148,23 @@ namespace MyTestMirror
         {
             atkManager.UpdateAttack();
             mgAttack.UpdateAttack();
-            bool run = Input.GetKey(KeyCode.E) && dados.StManager.VerifyStaminaAction();
+            bool run = Input.GetKey(KeyCode.LeftShift) && dados.StManager.VerifyStaminaAction();
 
             if (Input.GetMouseButtonDown(0))
             {
-                Debug.Log("Input");
                 Vector3 V;
                 if (GetRaycastPoint.GetPoint(out V))
                 {
-                    Debug.Log("GetRaycastPoint");
                     thisControl.ModificarOndeChegar(V);
                     markPoint.transform.parent = null;
                     markPoint.SetActive(true);
                     markPoint.transform.position = V;
                 }
             }
-            else if (Input.GetKeyDown(KeyCode.Q) && mgAttack.IniciarAtaqueSePodeAtacar())
+            else if (Input.GetKeyDown(KeyCode.Q) 
+                && mgAttack.IniciarAtaqueSePodeAtacar()
+                && dados.StManager.VerifyStaminaAction()
+                )
             {
                 Vector3 V;
                 if (!GetRaycastPoint.GetPoint(out V))
@@ -159,16 +177,20 @@ namespace MyTestMirror
                 }
 
                 CmdShoot(V);
+                dados.StManager.ConsumeStamina(mgAttack.CostStaminaPoints);
                 mgAttack.DisparaAtaque();
                 estado = EstadoDoPersonagem.emMgAtk;
                 thisControl.Mov.UseSlowSpeed = true;
             }
             else if (Input.GetKeyDown(KeyCode.W)
                 && atkManager.IniciarAtaqueSePodeAtacar()
-                && mgAttack.IniciarAtaqueSePodeAtacar())
+                && mgAttack.IniciarAtaqueSePodeAtacar()
+                && dados.StManager.VerifyStaminaAction()
+                )
             {
 
                 //thisControl.ModificarOndeChegar(transform.position);
+                dados.StManager.ConsumeStamina(atkManager.CostStaminaPoints);
                 CmdIniciarAtk();
                 thisControl.Mov.UseSlowSpeed = true;
 

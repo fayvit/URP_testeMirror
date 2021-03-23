@@ -134,11 +134,6 @@ namespace MyTestMirror
         {
             
             EventAgregator.PublishGameEvent(EventKey.receiveServerTick,list);
-
-            for (int i = 0; i < list.Count; i++)
-            {
-                ServerStatus server = list.Values.ToList()[i];
-            }
         }
 
         void ParseMessage(byte[] bytes)

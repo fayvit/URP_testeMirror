@@ -64,6 +64,7 @@
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\MyUI_Space\AnImageOption.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\TesteUi_listServer\SingletonClientTick.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\MainScripts\CharacterManager.cs" />
+    <Compile Include="Assets\MyTests\newTestScripts\MainScripts\ViewDatesHudPlayerDatesVersion.cs" />
     <Compile Include="Assets\MyTests\testScripts\ListServerTest\FindSizeInTheCanvas.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\Movimentacao\ControlledMoveForCharacter.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\CommandReaderSpace\N3DS\RawCustomAxis.cs" />
@@ -157,7 +158,7 @@
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\MyUI_Space\ParentingInTheHUD.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\Camera\InducedDirection.cs" />
     <Compile Include="Assets\MyTests\newTestScripts\FayvitPackagesScripts_v03_2021\Camera\FayvitCameraSupport.cs" />
-    <Compile Include="Assets\MyTests\newTestScripts\MainScripts\ViewDatesHudPlayerDatesVersion.cs" />
+    <Compile Include="Assets\MyTests\newTestScripts\Auxiliares\PiscaBarra.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Mirror\Plugins\Mono.Cecil\Mono.CecilX.dll" />

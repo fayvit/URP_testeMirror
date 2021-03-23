@@ -19,9 +19,14 @@ public class DamageTrigger : NetworkBehaviour
     {
         if (other.gameObject != Dono)
         {
-            Debug.Log("pegou");
-            EventAgregator.Publish(new GameEvent(EventKey.bulletDamage, transform.position, other.gameObject, Dono, transform.forward));
-
+            EventAgregator.Publish(
+                new GameEvent(
+                    EventKey.bulletDamage, 
+                    transform.position, 
+                    other.gameObject, 
+                    Dono, 
+                    transform.forward
+                    ));
         }
     }
 }
